@@ -1,8 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-
-import Explorez from "./screen/Explorez";
+import { useNavigation } from "@react-navigation/core";
+// import { useNavigation } from "@react-navigation/native";
 
 export default function App() {
   const navigation = useNavigation();
@@ -10,7 +9,7 @@ export default function App() {
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("/Explorez");
+          navigation.navigate("Explorez");
         }}
       >
         <Image
