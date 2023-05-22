@@ -1,10 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
+import Explorez from "./screen/Explorez";
 
 export default function App() {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("/Explorez");
+        }}
+      >
+        <Image
+          source={require("./assets/logo.png")}
+          alt="logo"
+          style={styles.logo}
+        />
+      </TouchableOpacity>
+
       <StatusBar style="auto" />
     </View>
   );
@@ -13,8 +28,9 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
+  logo: { width: 250, height: 250 },
 });
