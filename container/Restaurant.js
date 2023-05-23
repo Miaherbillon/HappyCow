@@ -58,7 +58,8 @@ export default function Restaurant({ navigation }) {
 
                   <View>
                     <Text style={styles.title}>{elem.name}</Text>
-                    <Text style={styles.description} numberOfLines={5}>
+                    <Text style={styles.address}>{elem.address}</Text>
+                    <Text style={styles.description} numberOfLines={3}>
                       {elem.description}
                     </Text>
                   </View>
@@ -102,7 +103,8 @@ const styles = StyleSheet.create({
   },
   display: { flexDirection: "row", gap: 20 },
   title: { fontSize: 15, marginBottom: 10, fontWeight: "bold" },
-  description: { width: 200 },
+  description: { width: 200, marginTop: 5 },
+  address: { fontSize: 10, width: 200, fontWeight: "bold" },
   RestaurantBox: {
     borderColor: "rgb(216, 216, 216)",
     borderRadius: 5,
