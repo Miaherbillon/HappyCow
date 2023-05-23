@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  KeyboardAwareScrollView,
+  ScrollView,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -45,68 +45,77 @@ export default function CardRestaurant({ navigation, route }) {
       <Text>Loading ... </Text>
     </View>
   ) : (
-    <View style={styles.container}>
-      <View style={styles.containerVert}>
-        <View style={styles.containerHeader}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
-            <AntDesign name="caretleft" size={20} color="black" />
-          </TouchableOpacity>
-          <View style={styles.row}>
-            <TouchableOpacity>
-              <FontAwesome name="plane" size={24} color="black" />
+    <ScrollView Vertical>
+      <View style={styles.container}>
+        <View style={styles.containerVert}>
+          <View style={styles.containerHeader}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <AntDesign name="caretleft" size={20} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity>
-              <AntDesign name="staro" size={24} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Entypo name="share" size={24} color="black" />
-            </TouchableOpacity>
+            <View style={styles.row}>
+              <TouchableOpacity>
+                <FontAwesome name="plane" size={24} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <AntDesign name="staro" size={24} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Entypo name="share" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* ---------------------- */}
+          {/* ---------------------- */}
+
+          <ScrollView horizontal>
+            <View style={styles.images}>
+              {route.params.elem.pictures.map((images) => {
+                return <Image source={{ uri: images }} style={styles.image} />;
+              })}
+            </View>
+          </ScrollView>
+          <View style={styles.title}>
+            <Text style={styles.name}>{route.params.elem.name}</Text>
+            <Text style={styles.type}>
+              <Entypo name="leaf" size={24} color="black" />{" "}
+              {route.params.elem.type}
+            </Text>
           </View>
         </View>
-        {/* ---------------------- */}
-        {/* ---------------------- */}
-
-        <View style={styles.images}>
-          {route.params.elem.pictures.map((images) => {
-            return <Image source={{ uri: images }} style={styles.image} />;
-          })}
+        <View style={styles.info}>
+          <Text>{route.params.elem.description}</Text>
+          <Text>{route.params.elem.phone}</Text>
         </View>
-        <Text style={styles.title}>{route.params.elem.name}</Text>
-        <Text>{route.params.elem.type}</Text>
+        <MapView
+          style={styles.map}
+          provider={PROVIDER_GOOGLE}
+          initialRegion={{
+            latitude: 48.856614,
+            longitude: 2.3522219,
+            latitudeDelta: 0.02,
+            longitudeDelta: 0.02,
+          }}
+          showsUserLocation={true}
+        >
+          {coords.map((item) => {
+            return (
+              <Marker
+                key={item.id}
+                coordinate={{
+                  latitude: item.latitude,
+                  longitude: item.longitude,
+                }}
+                title={item.title}
+              />
+            );
+          })}
+        </MapView>
       </View>
-      <View style={styles.info}>
-        <Text>{route.params.elem.description}</Text>
-        <Text>{route.params.elem.phone}</Text>
-      </View>
-      <MapView
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={{
-          latitude: 48.856614,
-          longitude: 2.3522219,
-          latitudeDelta: 0.2,
-          longitudeDelta: 0.2,
-        }}
-        showsUserLocation={true}
-      >
-        {coords.map((item) => {
-          return (
-            <Marker
-              key={item.id}
-              coordinate={{
-                latitude: item.latitude,
-                longitude: item.longitude,
-              }}
-              title={item.title}
-            />
-          );
-        })}
-      </MapView>
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -117,7 +126,6 @@ const styles = StyleSheet.create({
   },
   containerVert: {
     backgroundColor: "rgb(31, 173, 158)",
-    paddingVertical: 20,
     paddingTop: 50,
   },
   containerResto: { marginTop: 20 },
@@ -134,16 +142,19 @@ const styles = StyleSheet.create({
   image: {
     width: 200,
     height: 200,
+    borderRadius: 5,
   },
-  title: { fontSize: 20, marginTop: 20 },
+  title: { margin: 20, gap: 10 },
+  name: { fontSize: 20 },
+  type: { fontSize: 20 },
   images: {
     flexDirection: "row",
-    gap: 20,
+    gap: 5,
     marginTop: 20,
   },
-  info: { gap: 20, marginTop: 20 },
+  info: { gap: 20, marginHorizontal: 20, marginVertical: 20 },
   map: {
-    height: 200,
+    height: "25%",
     width: "100%",
   },
 });

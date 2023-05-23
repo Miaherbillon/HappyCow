@@ -48,7 +48,6 @@ export default function Restaurant({ navigation }) {
                   navigation.navigate("CardRestaurant", { elem: elem })
                 }
               >
-                <Text style={styles.title}>{elem.name}</Text>
                 <View style={styles.display}>
                   <View key={elem.placeId}>
                     <Image
@@ -58,6 +57,7 @@ export default function Restaurant({ navigation }) {
                   </View>
 
                   <View>
+                    <Text style={styles.title}>{elem.name}</Text>
                     <Text style={styles.description} numberOfLines={5}>
                       {elem.description}
                     </Text>
@@ -81,30 +81,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     textAlign: "center",
-    gap: 10,
-    marginHorizontal: "5%",
+    gap: 5,
   },
   displayMenu: {
     flexDirection: "row",
     gap: 5,
     marginHorizontal: "10%",
-    marginVertical: "5%",
+    marginVertical: "2%",
     justifyContent: "center",
   },
   menu: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 10,
     borderColor: "grey",
-    padding: 5,
+    height: 50,
+    padding: 10,
     flex: 1,
     textAlign: "center",
-    fontSize: 15,
+    fontSize: 12,
   },
   display: { flexDirection: "row", gap: 20 },
-  title: { fontSize: 20, marginBottom: 10 },
+  title: { fontSize: 15, marginBottom: 10, fontWeight: "bold" },
   description: { width: 200 },
   RestaurantBox: {
-    borderColor: "grey",
+    borderColor: "rgb(216, 216, 216)",
     borderRadius: 5,
     borderWidth: 1,
     width: "100%",
@@ -113,6 +113,6 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 100,
-    height: 80,
+    height: 110,
   },
 });
