@@ -12,11 +12,13 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function CardRestaurant({ navigation, route }) {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [Loading, setLoading] = useState(true);
+  let Favoris = [];
 
   useEffect(() => {
     const getPermission = async () => {
@@ -40,6 +42,7 @@ export default function CardRestaurant({ navigation, route }) {
       title: route.params.elem.name,
     },
   ];
+
   return Loading ? (
     <View>
       <Text>Loading ... </Text>
@@ -60,7 +63,13 @@ export default function CardRestaurant({ navigation, route }) {
               <TouchableOpacity>
                 <FontAwesome name="plane" size={24} color="black" />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={async () => {
+                  Favoris = Favoris + route.params.elem.name + "-";
+                  await AsyncStorage.setItem("Favoris", Favoris);
+                  console.log(Favoris);
+                }}
+              >
                 <AntDesign name="staro" size={24} color="black" />
               </TouchableOpacity>
               <TouchableOpacity>
@@ -96,8 +105,8 @@ export default function CardRestaurant({ navigation, route }) {
           initialRegion={{
             latitude: 48.856614,
             longitude: 2.3522219,
-            latitudeDelta: 0.02,
-            longitudeDelta: 0.02,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
           }}
           showsUserLocation={true}
         >

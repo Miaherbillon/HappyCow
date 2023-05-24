@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image, Button, Text } from "react-native";
+import { View, StyleSheet, Image, TouchableOpacity, Text } from "react-native";
 
 export default function Home({ navigation }) {
   return (
@@ -8,12 +8,13 @@ export default function Home({ navigation }) {
         alt="logo"
         style={styles.logo}
       />
-      <Button
-        title="ici"
+      <TouchableOpacity
         onPress={() => {
           navigation.navigate("Restaurant");
         }}
-      />
+      >
+        <Text style={styles.tap}>Entrer</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -25,4 +26,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   logo: { width: 250, height: 250 },
+  tap: { fontSize: 20, color: "white", fontWeight: "bold" },
 });

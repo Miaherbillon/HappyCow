@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 export default function Explorer() {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation();
   useEffect(() => {
     const getPermission = async () => {
@@ -17,7 +18,7 @@ export default function Explorer() {
         const { coords } = await Location.getCurrentPositionAsync();
         setLatitude(coords.latitude);
         setLongitude(coords.longitude);
-        setLoading(false);
+        setIsLoading(false);
       } else {
         alert("permission refusée");
       }
@@ -25,7 +26,11 @@ export default function Explorer() {
     getPermission();
   }, []);
 
-  return (
+  return isLoading ? (
+    <View>
+      <Text>Loading ...</Text>
+    </View>
+  ) : (
     <View>
       <View style={styles.header}>
         <FontAwesome name="map-marker" size={30} color="white" />
@@ -36,10 +41,10 @@ export default function Explorer() {
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         initialRegion={{
-          latitude: 48.856614,
-          longitude: 2.3522219,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
+          latitude: latitude,
+          longitude: longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
         }}
         showsUserLocation={true}
       >

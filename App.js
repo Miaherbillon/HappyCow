@@ -6,7 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 
 import Home from "./container/Home";
-import Favories from "./container/Favories";
+import Favoris from "./container/Favoris";
 import Restaurant from "./container/Restaurant";
 import CardRestaurant from "./container/CardRestaurant";
 import Explorer from "./container/Explorer";
@@ -14,6 +14,7 @@ import Explorer from "./container/Explorer";
 export default function App() {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
@@ -42,8 +43,8 @@ export default function App() {
                 }}
               ></Tab.Screen>
               <Tab.Screen
-                name="Favories"
-                component={Favories}
+                name="Favoris"
+                component={Favoris}
                 options={{
                   headerShown: false,
                   tabBarIcon: ({ color, size }) => (
