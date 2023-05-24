@@ -49,19 +49,52 @@ export default function Explorer() {
         showsUserLocation={true}
       >
         {Restaurant.map((item) => {
-          return (
-            <Marker
-              key={item.placeId}
-              coordinate={{
-                latitude: item.location.lat,
-                longitude: item.location.lng,
-              }}
-              title={item.name}
-              onPress={() => {
-                navigation.navigate("CardRestaurant", { elem: item });
-              }}
-            />
-          );
+          if (item.type === "vegan") {
+            return (
+              <Marker
+                key={item.placeId}
+                pinColor="green"
+                coordinate={{
+                  latitude: item.location.lat,
+                  longitude: item.location.lng,
+                }}
+                title={item.name}
+                onPress={() => {
+                  navigation.navigate("CardRestaurant", { elem: item });
+                }}
+              />
+            );
+          } else if (item.type === "vegetarian") {
+            return (
+              <Marker
+                key={item.placeId}
+                pinColor="aqua"
+                coordinate={{
+                  latitude: item.location.lat,
+                  longitude: item.location.lng,
+                }}
+                title={item.name}
+                onPress={() => {
+                  navigation.navigate("CardRestaurant", { elem: item });
+                }}
+              />
+            );
+          } else if (item.type === "veg-options") {
+            return (
+              <Marker
+                key={item.placeId}
+                pinColor="purple"
+                coordinate={{
+                  latitude: item.location.lat,
+                  longitude: item.location.lng,
+                }}
+                title={item.name}
+                onPress={() => {
+                  navigation.navigate("CardRestaurant", { elem: item });
+                }}
+              />
+            );
+          }
         })}
       </MapView>
     </View>

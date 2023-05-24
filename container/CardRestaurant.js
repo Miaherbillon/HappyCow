@@ -13,12 +13,13 @@ import { Entypo } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Favories from "./Favoris";
 
 export default function CardRestaurant({ navigation, route }) {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [Loading, setLoading] = useState(true);
-  let Favoris = [];
+  const [favoris, setFavoris] = useState([]);
 
   useEffect(() => {
     const getPermission = async () => {
@@ -64,11 +65,18 @@ export default function CardRestaurant({ navigation, route }) {
                 <FontAwesome name="plane" size={24} color="black" />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={async () => {
-                  Favoris = Favoris + route.params.elem.name + "-";
-                  await AsyncStorage.setItem("Favoris", Favoris);
-                  console.log(Favoris);
+                onPress={() => {
+                  let newFavoris = [...favoris];
+                  newFavoris.push(route.params.elem.name);
+                  setFavoris(newFavoris);
+                  console.log(newFavoris);
                 }}
+
+                // onPress={async () => {
+                //   Favoris = Favoris + route.params.elem.name + "-";
+                //   await AsyncStorage.setItem("Favoris", Favoris);
+                //   console.log(Favoris);
+                // }}
               >
                 <AntDesign name="staro" size={24} color="black" />
               </TouchableOpacity>

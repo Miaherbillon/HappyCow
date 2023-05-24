@@ -7,6 +7,8 @@ import Header from "../components/Header";
 export default function Restaurant({ navigation }) {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState(false);
+  const [type, setType] = useState();
   useEffect(() => {
     const fechData = async () => {
       const { data } = await axios.get(
@@ -24,49 +26,70 @@ export default function Restaurant({ navigation }) {
     <KeyboardAwareScrollView>
       <Header />
       <View style={styles.displayMenu}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setFilter(true);
+            setType("vegan");
+          }}
+        >
           <Text style={styles.menu}>Végan</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setFilter(true);
+            setType("vegetarian");
+          }}
+        >
           <Text style={styles.menu}>Végétarien</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setFilter(true);
+            setType("veg-options");
+          }}
+        >
           <Text style={styles.menu}>Option Végétarien</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.menu}>Filtre</Text>
+        <TouchableOpacity
+          onPress={() => {
+            setFilter(false);
+          }}
+        >
+          <Text style={styles.menu}>enlever filtre</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
         {data.map((elem, index) => {
-          return (
-            elem.description && (
-              <TouchableOpacity
-                key={elem.placeId}
-                style={styles.RestaurantBox}
-                onPress={() =>
-                  navigation.navigate("CardRestaurant", { elem: elem })
-                }
-              >
-                <View style={styles.display}>
-                  <View key={elem.placeId}>
-                    <Image
-                      source={{ uri: elem.thumbnail }}
-                      style={styles.image}
-                    />
-                  </View>
+          if (elem.type === type || filter === false) {
+            return (
+              elem.description && (
+                <TouchableOpacity
+                  key={elem.placeId}
+                  style={styles.RestaurantBox}
+                  onPress={() =>
+                    navigation.navigate("CardRestaurant", { elem: elem })
+                  }
+                >
+                  <View style={styles.display}>
+                    <View key={elem.placeId}>
+                      <Image
+                        source={{ uri: elem.thumbnail }}
+                        style={styles.image}
+                      />
+                    </View>
 
-                  <View>
-                    <Text style={styles.title}>{elem.name}</Text>
-                    <Text style={styles.address}>{elem.address}</Text>
-                    <Text style={styles.description} numberOfLines={3}>
-                      {elem.description}
-                    </Text>
+                    <View>
+                      <Text style={styles.title}>{elem.name}</Text>
+                      <Text style={styles.address}>{elem.address}</Text>
+                      <Text style={styles.description} numberOfLines={3}>
+                        {elem.description}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            )
-          );
+                </TouchableOpacity>
+              )
+            );
+          }
         })}
       </View>
     </KeyboardAwareScrollView>
