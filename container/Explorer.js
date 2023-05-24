@@ -1,16 +1,22 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import * as Location from "expo-location";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import Restaurant from "../assets/restaurants.json";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function Explorer() {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [vegan, setVegan] = useState(false);
+  const [vegetarien, setVegetarien] = useState(false);
+  const [optveg, setOptveg] = useState(false);
+
   const navigation = useNavigation();
+
   useEffect(() => {
     const getPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -18,6 +24,9 @@ export default function Explorer() {
         const { coords } = await Location.getCurrentPositionAsync();
         setLatitude(coords.latitude);
         setLongitude(coords.longitude);
+        setOptveg(true);
+        setVegan(true);
+        setVegetarien(true);
         setIsLoading(false);
       } else {
         alert("permission refusée");
@@ -36,7 +45,53 @@ export default function Explorer() {
         <FontAwesome name="map-marker" size={30} color="white" />
         <Text style={styles.title}>Happy Cow</Text>
       </View>
-
+      <View style={styles.legende}>
+        <Text style={styles.filterTitle}>Selectionne un filtre :</Text>
+        <View style={styles.filter}>
+          <TouchableOpacity>
+            <Text
+              onPress={() => {
+                setVegetarien(false);
+                setOptveg(false);
+              }}
+            >
+              Végan
+              <FontAwesome5 name="map-marker-alt" size={24} color="green" />
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setVegan(false);
+              setOptveg(false);
+            }}
+          >
+            <Text>
+              Végétarien
+              <FontAwesome5 name="map-marker-alt" size={24} color="blue" />
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setVegan(false);
+              setVegetarien(false);
+            }}
+          >
+            <Text>
+              Option Végétarien
+              <FontAwesome5 name="map-marker-alt" size={24} color="red" />
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            setVegan(true);
+            setVegetarien(true);
+            setOptveg(true);
+          }}
+        >
+          <Text>Tout afficher</Text>
+        </TouchableOpacity>
+      </View>
       <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
@@ -49,7 +104,7 @@ export default function Explorer() {
         showsUserLocation={true}
       >
         {Restaurant.map((item) => {
-          if (item.type === "vegan") {
+          if (item.type === "vegan" && vegan) {
             return (
               <Marker
                 key={item.placeId}
@@ -64,11 +119,11 @@ export default function Explorer() {
                 }}
               />
             );
-          } else if (item.type === "vegetarian") {
+          } else if (item.type === "vegetarian" && vegetarien) {
             return (
               <Marker
                 key={item.placeId}
-                pinColor="aqua"
+                pinColor="blue"
                 coordinate={{
                   latitude: item.location.lat,
                   longitude: item.location.lng,
@@ -79,11 +134,11 @@ export default function Explorer() {
                 }}
               />
             );
-          } else if (item.type === "veg-options") {
+          } else if (item.type === "veg-options" && optveg) {
             return (
               <Marker
                 key={item.placeId}
-                pinColor="purple"
+                pinColor="red"
                 coordinate={{
                   latitude: item.location.lat,
                   longitude: item.location.lng,
@@ -101,7 +156,7 @@ export default function Explorer() {
   );
 }
 const styles = StyleSheet.create({
-  map: { width: "100%", height: "100%" },
+  map: { width: "100%", height: "70%" },
   header: {
     height: 110,
     paddingTop: 40,
@@ -112,4 +167,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: { fontSize: 30, color: "white" },
+  legende: {
+    height: 110,
+    padding: 10,
+    borderWidth: 3,
+    borderRadius: 5,
+    borderColor: "rgb(159, 137, 191)",
+    margin: 5,
+  },
+  filterTitle: { fontSize: 15, marginBottom: 10 },
+  filter: {
+    flexDirection: "row",
+    gap: 20,
+    justifyContent: "center",
+    marginBottom: 17,
+  },
 });

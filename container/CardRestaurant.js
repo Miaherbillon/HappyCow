@@ -19,7 +19,7 @@ export default function CardRestaurant({ navigation, route }) {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [Loading, setLoading] = useState(true);
-  const [favoris, setFavoris] = useState([]);
+  let favoris = [];
 
   useEffect(() => {
     const getPermission = async () => {
@@ -65,18 +65,18 @@ export default function CardRestaurant({ navigation, route }) {
                 <FontAwesome name="plane" size={24} color="black" />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => {
-                  let newFavoris = [...favoris];
-                  newFavoris.push(route.params.elem.name);
-                  setFavoris(newFavoris);
-                  console.log(newFavoris);
-                }}
-
-                // onPress={async () => {
-                //   Favoris = Favoris + route.params.elem.name + "-";
-                //   await AsyncStorage.setItem("Favoris", Favoris);
-                //   console.log(Favoris);
+                // onPress={() => {
+                //   let newFavoris = [...favoris];
+                //   newFavoris.push(route.params.elem.name);
+                //   setFavoris(newFavoris);
+                //   console.log(newFavoris);
                 // }}
+
+                onPress={async () => {
+                  favoris = favoris + route.params.elem.name + "-";
+                  await AsyncStorage.setItem("Favoris", favoris);
+                  console.log(favoris);
+                }}
               >
                 <AntDesign name="staro" size={24} color="black" />
               </TouchableOpacity>
@@ -86,8 +86,6 @@ export default function CardRestaurant({ navigation, route }) {
             </View>
           </View>
           {/* ---------------------- */}
-          {/* ---------------------- */}
-
           <ScrollView horizontal>
             <View style={styles.images}>
               {route.params.elem.pictures.map((images) => {
@@ -157,8 +155,8 @@ const styles = StyleSheet.create({
   },
   bloc: { alignItems: "center" },
   image: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     borderRadius: 5,
   },
   title: { margin: 20, gap: 10 },
