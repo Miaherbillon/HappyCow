@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Modal,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -19,6 +20,7 @@ export default function CardRestaurant({ navigation, route }) {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [Loading, setLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   let favoris = [];
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export default function CardRestaurant({ navigation, route }) {
       }
     };
     getPermission();
-  }, []);
+  }, [favoris]);
   const coords = [
     {
       id: 1,
@@ -93,17 +95,49 @@ export default function CardRestaurant({ navigation, route }) {
               })}
             </View>
           </ScrollView>
-          <View style={styles.title}>
-            <Text style={styles.name}>{route.params.elem.name}</Text>
-            <Text style={styles.type}>
-              <Entypo name="leaf" size={24} color="black" />{" "}
-              {route.params.elem.type}
-            </Text>
+          <View style={styles.boxTitle}>
+            <View style={styles.title}>
+              <Text style={styles.name}>{route.params.elem.name}</Text>
+              <Text style={styles.type}>
+                <Entypo name="leaf" size={24} color="black" />{" "}
+                {route.params.elem.type}
+              </Text>
+            </View>
           </View>
         </View>
         <View style={styles.info}>
+          <View style={styles.infoBox}>
+            <TouchableOpacity onPress={() => alert(route.params.elem.phone)}>
+              <Text style={styles.coordinate}>Telephone</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                alert(route.params.elem.website);
+              }}
+            >
+              <Text style={styles.coordinate}>Site internet</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(true);
+              }}
+            >
+              <Text style={styles.coordinate}>laisser un avis</Text>
+              {modalVisible && (
+                <Modal
+                  style={styles.containerModal}
+                  animationType="slide"
+                  transparent={true}
+                  //   visible={modalVisible}
+                >
+                  <View>
+                    <Text>ok</Text>
+                  </View>
+                </Modal>
+              )}
+            </TouchableOpacity>
+          </View>
           <Text>{route.params.elem.description}</Text>
-          <Text>{route.params.elem.phone}</Text>
         </View>
         <MapView
           style={styles.map}
@@ -172,4 +206,14 @@ const styles = StyleSheet.create({
     height: "25%",
     width: "100%",
   },
+  infoBox: { flexDirection: "row", gap: 10, justifyContent: "center" },
+  coordinate: {
+    fontSize: 20,
+    borderWidth: 1,
+    padding: 5,
+    borderColor: "grey",
+    color: "grey",
+    borderRadius: 15,
+  },
+  containerModal: { marginTop: 200 },
 });

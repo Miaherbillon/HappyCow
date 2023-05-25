@@ -13,7 +13,7 @@ export default function Favories() {
       setIsLoading(false);
     };
     response();
-  });
+  }, []);
 
   return isLoading ? (
     <View style={styles.container}>

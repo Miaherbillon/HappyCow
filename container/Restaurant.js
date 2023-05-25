@@ -96,7 +96,11 @@ export default function Restaurant({ navigation }) {
       </View>
       <View style={styles.container}>
         {data.map((elem) => {
-          if (elem.name === search || !search || elem.type === search) {
+          if (
+            elem.name.includes(search) ||
+            elem.type.includes(search) ||
+            !search
+          ) {
             if (elem.type === type || filter === false) {
               return (
                 elem.description && (
