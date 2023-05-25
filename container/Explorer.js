@@ -33,7 +33,7 @@ export default function Explorer() {
       }
     };
     getPermission();
-  }, []);
+  });
 
   return isLoading ? (
     <View>

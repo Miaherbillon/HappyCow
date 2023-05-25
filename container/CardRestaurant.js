@@ -14,13 +14,13 @@ import { Entypo } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Favories from "./Favoris";
 
 export default function CardRestaurant({ navigation, route }) {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [Loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [color, setColor] = useState(false);
   let favoris = [];
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function CardRestaurant({ navigation, route }) {
       }
     };
     getPermission();
-  }, [favoris]);
+  });
   const coords = [
     {
       id: 1,
@@ -51,6 +51,8 @@ export default function CardRestaurant({ navigation, route }) {
       <Text>Loading ... </Text>
     </View>
   ) : (
+    //Icone haut de page //
+
     <ScrollView Vertical>
       <View style={styles.container}>
         <View style={styles.containerVert}>
@@ -67,27 +69,29 @@ export default function CardRestaurant({ navigation, route }) {
                 <FontAwesome name="plane" size={24} color="black" />
               </TouchableOpacity>
               <TouchableOpacity
-                // onPress={() => {
-                //   let newFavoris = [...favoris];
-                //   newFavoris.push(route.params.elem.name);
-                //   setFavoris(newFavoris);
-                //   console.log(newFavoris);
-                // }}
-
+                key={route.params.elem.placeID}
                 onPress={async () => {
-                  favoris = favoris + route.params.elem.name + "-";
-                  await AsyncStorage.setItem("Favoris", favoris);
+                  favoris = favoris + route.params.elem.name;
+                  await AsyncStorage.setItem(route.params.elem.name, favoris);
                   console.log(favoris);
+                  setColor(!color);
+                  //   navigation.navigate("Favoris", { elem: route.params.elem });
                 }}
               >
-                <AntDesign name="staro" size={24} color="black" />
+                {color ? (
+                  <AntDesign name="star" size={24} color="yellow" />
+                ) : (
+                  <AntDesign name="star" size={24} color="black" />
+                )}
               </TouchableOpacity>
               <TouchableOpacity>
                 <Entypo name="share" size={24} color="black" />
               </TouchableOpacity>
             </View>
           </View>
-          {/* ---------------------- */}
+
+          {/* // Images // */}
+
           <ScrollView horizontal>
             <View style={styles.images}>
               {route.params.elem.pictures.map((images) => {
@@ -95,6 +99,9 @@ export default function CardRestaurant({ navigation, route }) {
               })}
             </View>
           </ScrollView>
+
+          {/* Titre et type */}
+
           <View style={styles.boxTitle}>
             <View style={styles.title}>
               <Text style={styles.name}>{route.params.elem.name}</Text>
