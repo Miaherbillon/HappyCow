@@ -42,11 +42,7 @@ export default function Favories({ navigation }) {
         {Favoris.map((elem) => {
           console.log(elem);
           return (
-            <TouchableOpacity
-            // onPress={async () => {
-            //   navigation.navigate("CardRestaurant");
-            // }}
-            >
+            <TouchableOpacity>
               <Text>{elem}</Text>
             </TouchableOpacity>
           );

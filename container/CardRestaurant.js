@@ -71,11 +71,14 @@ export default function CardRestaurant({ navigation, route }) {
               <TouchableOpacity
                 key={route.params.elem.placeID}
                 onPress={async () => {
-                  favoris = favoris + route.params.elem.name;
-                  await AsyncStorage.setItem(route.params.elem.name, favoris);
-                  console.log(favoris);
                   setColor(!color);
-                  //   navigation.navigate("Favoris", { elem: route.params.elem });
+                  if (color) {
+                    favoris = favoris + route.params.elem.name;
+                    await AsyncStorage.setItem(route.params.elem.name, favoris);
+                    console.log(favoris);
+                  } else {
+                    await AsyncStorage.clear();
+                  }
                 }}
               >
                 {color ? (
