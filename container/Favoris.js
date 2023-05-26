@@ -10,31 +10,40 @@ import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
 
-// import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Favories(extraData) {
   const [Favoris, setFavoris] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
+  const [data, setData] = useState();
   console.log(extraData.extraData);
 
   useEffect(() => {
     const response = () => {
       setFavoris(extraData.extraData);
+      setData(extraData);
       setIsLoading(true);
     };
     isFocused && response();
   }, [isFocused]);
 
+  // console.log(data);
+
   return isLoading ? (
-    <View style={styles.container}>
+    <View style={styles.page}>
       <Text style={styles.title}>Liste des favoris</Text>
-      <View>
+      <View style={styles.container}>
         {Favoris.map((elem) => {
           return (
-            <TouchableOpacity>
-              <Text>{elem}</Text>
+            <TouchableOpacity
+              key={elem.placeId}
+              onPress={() => {
+                navigation.navigate("CardRestaurant", { elem: data });
+              }}
+            >
+              <Text style={styles.nameFav}>{elem}</Text>
             </TouchableOpacity>
           );
         })}
@@ -43,7 +52,6 @@ export default function Favories(extraData) {
       <TouchableOpacity
         onPress={async () => {
           await AsyncStorage.clear();
-          RefreshControl;
         }}
       >
         <Text>tout supprimer</Text>
@@ -57,6 +65,29 @@ export default function Favories(extraData) {
   );
 }
 const styles = StyleSheet.create({
-  container: { marginTop: 100, gap: 10, marginBottom: 30 },
-  title: { fontSize: 30, textAlign: "center" },
+  page: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    backgroundColor: "rgb(31, 173, 158)",
+  },
+  container: {
+    gap: 10,
+    marginBottom: 30,
+    paddingLeft: 20,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 20,
+    borderColor: "grey",
+    backgroundColor: "white",
+    color: "pink",
+  },
+  title: {
+    marginTop: 70,
+    fontSize: 40,
+    textAlign: "center",
+    marginBottom: 40,
+    color: "white",
+  },
+  nameFav: { fontSize: 20, marginBottom: 5 },
 });

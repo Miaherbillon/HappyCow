@@ -14,6 +14,7 @@ import { Entypo } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { useIsFocused } from "@react-navigation/native";
 
 export default function CardRestaurant({ navigation, route }) {
   const [latitude, setLatitude] = useState(null);
@@ -21,6 +22,9 @@ export default function CardRestaurant({ navigation, route }) {
   const [Loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [storageFavoris, setStorageFavoris] = useState();
+  const [color, setColor] = useState();
+  // const isFocused = useIsFocused();
+  // console.log(route.params.elem.name);
 
   useEffect(() => {
     const getPermission = async () => {
@@ -37,11 +41,11 @@ export default function CardRestaurant({ navigation, route }) {
     const asyncStorage = async () => {
       keys = await AsyncStorage.getAllKeys();
       setStorageFavoris(keys);
-      //   console.log(storageFavoris);
+      console.log(storageFavoris);
     };
 
     getPermission() && asyncStorage();
-  }, [storageFavoris]);
+  }, [color]);
   const coords = [
     {
       id: 1,
@@ -71,16 +75,20 @@ export default function CardRestaurant({ navigation, route }) {
               <TouchableOpacity>
                 <FontAwesome name="plane" size={24} color="black" />
               </TouchableOpacity>
+
               <TouchableOpacity
                 key={route.params.elem.placeID}
                 onPress={async () => {
                   if (storageFavoris.includes(route.params.elem.name)) {
                     await AsyncStorage.removeItem(route.params.elem.name);
+                    setColor(!color);
                   } else {
+                    setColor(!color);
                     newFab = [...storageFavoris];
-                    newFab.push(route.params.elem.name);
+                    newFab.push([route.params.elem.name]);
                     await AsyncStorage.setItem(
                       route.params.elem.name,
+                      // JSON.parse(newFab)
                       JSON.stringify(newFab)
                     );
                   }
