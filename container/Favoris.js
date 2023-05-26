@@ -10,37 +10,28 @@ import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
 
-export default function Favories({ navigation }) {
-  const [Favoris, setFavoris] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-  const isFocused = useIsFocused();
+// import { useNavigation } from "@react-navigation/native";
 
-  let keys = [];
+export default function Favories(extraData) {
+  const [Favoris, setFavoris] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const isFocused = useIsFocused();
+  // const navigation = useNavigation();
+  console.log(extraData.extraData);
 
   useEffect(() => {
-    const response = async () => {
-      keys = await AsyncStorage.getAllKeys();
-      fav = [];
-      for (let i = 0; i < keys.length; i++) {
-        values = await AsyncStorage.getItem(keys[i]);
-        fav.push(values);
-      }
-      setFavoris(fav);
+    const response = () => {
+      setFavoris(extraData.extraData);
+      setIsLoading(true);
     };
-    setIsLoading(false);
     isFocused && response();
-  }, [isFocused, AsyncStorage]);
+  }, [isFocused]);
 
   return isLoading ? (
-    <View style={styles.container}>
-      <Text>Loading ...</Text>
-    </View>
-  ) : Favoris ? (
     <View style={styles.container}>
       <Text style={styles.title}>Liste des favoris</Text>
       <View>
         {Favoris.map((elem) => {
-          console.log(elem);
           return (
             <TouchableOpacity>
               <Text>{elem}</Text>
@@ -66,6 +57,6 @@ export default function Favories({ navigation }) {
   );
 }
 const styles = StyleSheet.create({
-  container: { marginTop: 100, gap: 50 },
+  container: { marginTop: 100, gap: 10, marginBottom: 30 },
   title: { fontSize: 30, textAlign: "center" },
 });

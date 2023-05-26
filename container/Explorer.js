@@ -36,9 +36,7 @@ export default function Explorer() {
   });
 
   return isLoading ? (
-    <View>
-      <Text>Loading ...</Text>
-    </View>
+    <Text>Loading ...</Text>
   ) : (
     <View>
       <View style={styles.header}>

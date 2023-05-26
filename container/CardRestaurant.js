@@ -20,8 +20,7 @@ export default function CardRestaurant({ navigation, route }) {
   const [longitude, setLongitude] = useState(null);
   const [Loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [color, setColor] = useState(false);
-  let favoris = [];
+  const [storageFavoris, setStorageFavoris] = useState();
 
   useEffect(() => {
     const getPermission = async () => {
@@ -35,8 +34,14 @@ export default function CardRestaurant({ navigation, route }) {
         alert("permission refusée");
       }
     };
-    getPermission();
-  });
+    const asyncStorage = async () => {
+      keys = await AsyncStorage.getAllKeys();
+      setStorageFavoris(keys);
+      //   console.log(storageFavoris);
+    };
+
+    getPermission() && asyncStorage();
+  }, [storageFavoris]);
   const coords = [
     {
       id: 1,
@@ -47,9 +52,7 @@ export default function CardRestaurant({ navigation, route }) {
   ];
 
   return Loading ? (
-    <View>
-      <Text>Loading ... </Text>
-    </View>
+    <Text>Loading ... </Text>
   ) : (
     //Icone haut de page //
 
@@ -71,17 +74,19 @@ export default function CardRestaurant({ navigation, route }) {
               <TouchableOpacity
                 key={route.params.elem.placeID}
                 onPress={async () => {
-                  setColor(!color);
-                  if (color) {
-                    favoris = favoris + route.params.elem.name;
-                    await AsyncStorage.setItem(route.params.elem.name, favoris);
-                    console.log(favoris);
+                  if (storageFavoris.includes(route.params.elem.name)) {
+                    await AsyncStorage.removeItem(route.params.elem.name);
                   } else {
-                    await AsyncStorage.clear();
+                    newFab = [...storageFavoris];
+                    newFab.push(route.params.elem.name);
+                    await AsyncStorage.setItem(
+                      route.params.elem.name,
+                      JSON.stringify(newFab)
+                    );
                   }
                 }}
               >
-                {color ? (
+                {storageFavoris.includes(route.params.elem.name) ? (
                   <AntDesign name="star" size={24} color="yellow" />
                 ) : (
                   <AntDesign name="star" size={24} color="black" />
@@ -140,9 +145,7 @@ export default function CardRestaurant({ navigation, route }) {
                   transparent={true}
                   //   visible={modalVisible}
                 >
-                  <View>
-                    <Text>ok</Text>
-                  </View>
+                  <Text>ok</Text>
                 </Modal>
               )}
             </TouchableOpacity>

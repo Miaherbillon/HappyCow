@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "../components/Header";
+import Resto from "../assets/restaurants.json";
 
 export default function Restaurant({ navigation }) {
   const [data, setData] = useState();
@@ -17,20 +18,21 @@ export default function Restaurant({ navigation }) {
   const [filter, setFilter] = useState(false);
   const [search, setSearch] = useState();
   const [type, setType] = useState();
-  useEffect(() => {
-    const fechData = async () => {
-      const { data } = await axios.get(
-        "https://res.cloudinary.com/lereacteur-apollo/raw/upload/v1575242111/10w-full-stack/Scraping/restaurants.json"
-      );
-      setData(data), setLoading(false);
-    };
-    fechData();
-  }, [search]);
-  return loading ? (
-    <View>
-      <Text style={styles.loading}>Laoding ... </Text>
-    </View>
-  ) : (
+
+  // useEffect(() => {
+  //   const fechData = async () => {
+  //     const { data } = await axios.get(
+  //       "https://res.cloudinary.com/lereacteur-apollo/raw/upload/v1575242111/10w-full-stack/Scraping/restaurants.json"
+  //     );
+  //     setData(data), setLoading(false);
+  //   };
+  //   fechData();
+  // }, [search]);
+
+  // loading ? (
+  //   <Text style={styles.loading}>Laoding ... </Text>
+  // ) : (
+  return (
     <KeyboardAwareScrollView>
       <View style={styles.search}>
         <Header />
@@ -95,7 +97,8 @@ export default function Restaurant({ navigation }) {
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
-        {data.map((elem) => {
+        {Resto.map((elem) => {
+          // console.log(elem.name);
           if (
             elem.name.includes(search) ||
             elem.type.includes(search) ||
