@@ -1,16 +1,17 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import Home from "./container/Home";
-import Favoris from "./container/Favoris";
-import Restaurant from "./container/Restaurant";
-import CardRestaurant from "./container/CardRestaurant";
-import Explorer from "./container/Explorer";
+import Home from "./Screen/Home";
+import Favoris from "./Screen/Favoris";
+import Restaurant from "./Screen/Restaurant";
+import CardRestaurant from "./Screen/CardRestaurant";
+import Explorer from "./Screen/Explorer";
+import Signup from "./Screen/Signup";
+import Signin from "./Screen/Signin";
 import { useState, useEffect } from "react";
 
 export default function App() {
@@ -18,17 +19,33 @@ export default function App() {
   const Tab = createBottomTabNavigator();
   const [isLoading, setIsLoading] = useState(false);
   const [storageFavoris, setStorageFavoris] = useState();
+  const [userToken, setUserToken] = useState(null);
+
+  const setToken = async (token) => {
+    if (token) {
+      await AsyncStorage.setItem("userToken", token);
+    } else {
+      await AsyncStorage.removeItem("userToken");
+    }
+
+    setUserToken(token);
+  };
 
   useEffect(() => {
+    const bootstrapAsync = async () => {
+      const userToken = await AsyncStorage.getItem("userToken");
+      setUserToken(userToken);
+    };
+
     const storage = async () => {
       const response = await AsyncStorage.getAllKeys();
       // console.log(response);
       setStorageFavoris(response);
     };
     setIsLoading(true);
-    storage();
+    storage() && bootstrapAsync();
   }, [storageFavoris]);
-  // console.log(storageFavoris);
+
   return (
     isLoading && (
       <NavigationContainer>
@@ -45,6 +62,18 @@ export default function App() {
             component={CardRestaurant}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Signup"
+            component={Signup}
+            setToken={setToken}
+            options={{ headerShown: false }}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Signin"
+            component={Signin}
+            setToken={setToken}
+            // options={{ headerShown: false }}
+          ></Stack.Screen>
           <Stack.Screen name="Restaurant" options={{ headerShown: false }}>
             {() => (
               <Tab.Navigator>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,10 +8,7 @@ import {
   ScrollView,
   Modal,
 } from "react-native";
-import { useEffect, useState } from "react";
-import { AntDesign } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, Entypo } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,8 +19,9 @@ export default function CardRestaurant({ navigation, route }) {
   const [longitude, setLongitude] = useState(null);
   const [Loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [storageFavoris, setStorageFavoris] = useState();
+  const [storageFavoris, setStorageFavoris] = useState([]);
   const [color, setColor] = useState();
+
   // const isFocused = useIsFocused();
   // console.log(route.params.elem.name);
 
@@ -38,13 +37,13 @@ export default function CardRestaurant({ navigation, route }) {
         alert("permission refusée");
       }
     };
-    const asyncStorage = async () => {
+    const fetchAsyncStorage = async () => {
       keys = await AsyncStorage.getAllKeys();
       setStorageFavoris(keys);
       console.log(storageFavoris);
     };
 
-    getPermission() && asyncStorage();
+    getPermission() && fetchAsyncStorage();
   }, [color]);
   const coords = [
     {
@@ -54,13 +53,26 @@ export default function CardRestaurant({ navigation, route }) {
       title: route.params.elem.name,
     },
   ];
+  const handleFavoritePress = async () => {
+    if (storageFavoris.includes(route.params.elem.name)) {
+      await AsyncStorage.removeItem(route.params.elem.name);
+      setColor(!color);
+    } else {
+      setColor(!color);
+      const newFavorites = [...storageFavoris, route.params.elem];
+      await AsyncStorage.setItem(
+        route.params.elem.name,
+        JSON.stringify(newFavorites)
+      );
+    }
+  };
 
   return Loading ? (
     <Text>Loading ... </Text>
   ) : (
     //Icone haut de page //
 
-    <ScrollView Vertical>
+    <ScrollView vertical>
       <View style={styles.container}>
         <View style={styles.containerVert}>
           <View style={styles.containerHeader}>
@@ -78,21 +90,7 @@ export default function CardRestaurant({ navigation, route }) {
 
               <TouchableOpacity
                 key={route.params.elem.placeID}
-                onPress={async () => {
-                  if (storageFavoris.includes(route.params.elem.name)) {
-                    await AsyncStorage.removeItem(route.params.elem.name);
-                    setColor(!color);
-                  } else {
-                    setColor(!color);
-                    newFab = [...storageFavoris];
-                    newFab.push([route.params.elem.name]);
-                    await AsyncStorage.setItem(
-                      route.params.elem.name,
-                      // JSON.parse(newFab)
-                      JSON.stringify(newFab)
-                    );
-                  }
-                }}
+                onPress={handleFavoritePress}
               >
                 {storageFavoris.includes(route.params.elem.name) ? (
                   <AntDesign name="star" size={24} color="yellow" />

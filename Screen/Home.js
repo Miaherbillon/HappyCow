@@ -13,7 +13,15 @@ export default function Home({ navigation }) {
           navigation.navigate("Restaurant");
         }}
       >
-        <Text style={styles.tap}>Entrer</Text>
+        <Text style={styles.tap}>Voir les Restaurants</Text>
+      </TouchableOpacity>
+      <Text>ou</Text>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Signin");
+        }}
+      >
+        <Text style={styles.tap}>S'identifier</Text>
       </TouchableOpacity>
     </View>
   );
