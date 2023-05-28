@@ -12,6 +12,7 @@ import CardRestaurant from "./Screen/CardRestaurant";
 import Explorer from "./Screen/Explorer";
 import Signup from "./Screen/Signup";
 import Signin from "./Screen/Signin";
+import Profil from "./Screen/Profil";
 import { useState, useEffect } from "react";
 
 export default function App() {
@@ -118,6 +119,16 @@ export default function App() {
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                       <Foundation name="map" size={24} color="black" />
+                    ),
+                  }}
+                ></Tab.Screen>
+                <Tab.Screen
+                  name="Profil"
+                  component={Profil}
+                  options={{
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => (
+                      <MaterialIcons name="tag-faces" size={24} color="black" />
                     ),
                   }}
                 ></Tab.Screen>

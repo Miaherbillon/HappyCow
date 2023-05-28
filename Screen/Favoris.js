@@ -18,7 +18,7 @@ export default function Favories(extraData) {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [data, setData] = useState();
-  console.log(extraData.extraData);
+  console.log(extraData);
 
   useEffect(() => {
     const response = () => {
@@ -27,7 +27,7 @@ export default function Favories(extraData) {
       setIsLoading(true);
     };
     isFocused && response();
-  }, [isFocused]);
+  }, [isFocused, extraData]);
 
   // console.log(data);
 
@@ -35,10 +35,10 @@ export default function Favories(extraData) {
     <View style={styles.page}>
       <Text style={styles.title}>Liste des favoris</Text>
       <View style={styles.container}>
-        {Favoris.map((elem) => {
+        {Favoris.map((elem, index) => {
           return (
             <TouchableOpacity
-              key={elem.placeId}
+              key={index}
               onPress={() => {
                 navigation.navigate("CardRestaurant", { elem: data });
               }}
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     alignItems: "center",
-    backgroundColor: "rgb(31, 173, 158)",
+    backgroundColor: "rgb(152, 211, 204)",
   },
   container: {
     gap: 10,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     textAlign: "center",
     marginBottom: 40,
-    color: "white",
+    color: "black",
   },
   nameFav: { fontSize: 20, marginBottom: 5 },
 });
