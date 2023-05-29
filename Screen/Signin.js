@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import axios from "axios";
+import { response } from "express";
 
 export default function Signin({ setToken, navigation }) {
   const [email, setEmail] = useState("");
@@ -46,7 +47,6 @@ export default function Signin({ setToken, navigation }) {
           value={email}
           onChangeText={(email) => {
             setEmail(email);
-            setErrorMessage("");
           }}
         />
         <Text>Mot de passe:</Text>
@@ -56,10 +56,9 @@ export default function Signin({ setToken, navigation }) {
           value={password}
           onChangeText={(password) => {
             setPassword(password);
-            setErrorMessage("");
           }}
         />
-        {errorMessage !== "" && <Text>{errorMessage}</Text>}
+
         <TouchableOpacity title="Sign in" onPress={submit}>
           <Text style={styles.buttonCo}>Connexion</Text>
         </TouchableOpacity>
