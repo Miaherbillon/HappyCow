@@ -1,6 +1,7 @@
 import { View, StyleSheet, Image, TouchableOpacity, Text } from "react-native";
 
-export default function Home({ navigation }) {
+export default function Home({ navigation, setToken }) {
+  console.log(setToken);
   return (
     <View style={styles.container}>
       <Image
@@ -8,20 +9,17 @@ export default function Home({ navigation }) {
         alt="logo"
         style={styles.logo}
       />
+
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Restaurant");
+          {
+            setToken === null
+              ? navigation.navigate("Signin")
+              : navigation.navigate("Restaurant");
+          }
         }}
       >
-        <Text style={styles.tap}>Voir les Restaurants</Text>
-      </TouchableOpacity>
-      <Text>ou</Text>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Signin");
-        }}
-      >
-        <Text style={styles.tap}>S'identifier</Text>
+        <Text style={styles.tap}>Enter</Text>
       </TouchableOpacity>
     </View>
   );

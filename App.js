@@ -31,122 +31,112 @@ export default function App() {
 
     setUserToken(token);
   };
-
   useEffect(() => {
     const bootstrapAsync = async () => {
       const userToken = await AsyncStorage.getItem("userToken");
       setUserToken(userToken);
+
+      setIsLoading(true);
     };
 
-    const storage = async () => {
-      const response = await AsyncStorage.getAllKeys();
-      // console.log(response);
-      setStorageFavoris(response);
-    };
-    const setToken = async (token) => {
-      if (token) {
-        await AsyncStorage.setItem("userToken", token);
-      } else {
-        await AsyncStorage.removeItem("userToken");
-      }
+    bootstrapAsync();
+  }, []);
 
-      setUserToken(token);
-    };
-    setIsLoading(true);
-    storage() && bootstrapAsync() && setToken();
-  }, [storageFavoris]);
+  if (!isLoading) {
+    return null;
+  }
 
   return (
-    isLoading && (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          >
-            {/* {(props) => <Home {...props} extraData={storageFavoris} />} */}
-          </Stack.Screen>
-          <Stack.Screen
-            name="CardRestaurant"
-            component={CardRestaurant}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Signup"
-            component={Signup}
-            setToken={setToken}
-            options={{ headerShown: false }}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Signin"
-            component={Signin}
-            setToken={setToken}
-            options={{ title: "Revenir à la page Home" }}
-            // options={{ headerShown: false }}
-          ></Stack.Screen>
-          <Stack.Screen name="Restaurant" options={{ headerShown: false }}>
-            {() => (
-              <Tab.Navigator>
-                <Tab.Screen
-                  name="Resto"
-                  options={{
-                    headerShown: false,
-                    title: "les Restaurants",
-                    tabBarIcon: ({ color, size }) => (
-                      <MaterialIcons
-                        name="restaurant"
-                        size={24}
-                        color="black"
-                      />
-                    ),
-                  }}
-                >
-                  {(props) => (
-                    <Restaurant {...props} extraData={storageFavoris} />
-                  )}
-                </Tab.Screen>
-                <Tab.Screen
-                  name="Favoris"
-                  // component={Favoris}
-                  options={{
-                    headerShown: false,
-                    tabBarIcon: ({ color, size }) => (
-                      <MaterialIcons
-                        name="favorite-border"
-                        size={24}
-                        color="black"
-                      />
-                    ),
-                  }}
-                >
-                  {(props) => <Favoris {...props} extraData={storageFavoris} />}
-                </Tab.Screen>
-                <Tab.Screen
-                  name="Explorer"
-                  component={Explorer}
-                  options={{
-                    headerShown: false,
-                    tabBarIcon: ({ color, size }) => (
-                      <Foundation name="map" size={24} color="black" />
-                    ),
-                  }}
-                ></Tab.Screen>
-                <Tab.Screen
-                  name="Profil"
-                  component={Profil}
-                  options={{
-                    headerShown: false,
-                    tabBarIcon: ({ color, size }) => (
-                      <MaterialIcons name="tag-faces" size={24} color="black" />
-                    ),
-                  }}
-                ></Tab.Screen>
-              </Tab.Navigator>
-            )}
-          </Stack.Screen>
-        </Stack.Navigator>
-      </NavigationContainer>
-    )
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          // component={Home}
+          options={{ headerShown: false }}
+          // setToken={setToken}
+        >
+          {(props) => <Home {...props} setToken={userToken} />}
+        </Stack.Screen>
+
+        <Stack.Screen
+          name="CardRestaurant"
+          component={CardRestaurant}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Signup"
+          // component={Signup}
+          // setToken={setToken}
+          options={{ headerShown: false }}
+        >
+          {(props) => <Signup {...props} setToken={setToken} />}
+        </Stack.Screen>
+        <Stack.Screen
+          name="Signin"
+          // component={Signin}
+          // setToken={setToken}
+          options={{ title: "Revenir à la page Home" }}
+          // options={{ headerShown: false }}
+        >
+          {(props) => <Signin {...props} setToken={setToken} />}
+        </Stack.Screen>
+        <Stack.Screen name="Restaurant" options={{ headerShown: false }}>
+          {() => (
+            <Tab.Navigator>
+              <Tab.Screen
+                name="Resto"
+                options={{
+                  headerShown: false,
+                  title: "les Restaurants",
+                  tabBarIcon: ({ color, size }) => (
+                    <MaterialIcons name="restaurant" size={24} color="black" />
+                  ),
+                }}
+              >
+                {(props) => (
+                  <Restaurant {...props} extraData={storageFavoris} />
+                )}
+              </Tab.Screen>
+              <Tab.Screen
+                name="Favoris"
+                // component={Favoris}
+                options={{
+                  headerShown: false,
+                  tabBarIcon: ({ color, size }) => (
+                    <MaterialIcons
+                      name="favorite-border"
+                      size={24}
+                      color="black"
+                    />
+                  ),
+                }}
+              >
+                {(props) => <Favoris {...props} extraData={storageFavoris} />}
+              </Tab.Screen>
+              <Tab.Screen
+                name="Explorer"
+                component={Explorer}
+                options={{
+                  headerShown: false,
+                  tabBarIcon: ({ color, size }) => (
+                    <Foundation name="map" size={24} color="black" />
+                  ),
+                }}
+              ></Tab.Screen>
+              <Tab.Screen
+                name="Profil"
+                component={Profil}
+                options={{
+                  headerShown: false,
+                  tabBarIcon: ({ color, size }) => (
+                    <MaterialIcons name="tag-faces" size={24} color="black" />
+                  ),
+                }}
+              ></Tab.Screen>
+            </Tab.Navigator>
+          )}
+        </Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

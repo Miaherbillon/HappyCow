@@ -27,7 +27,7 @@ export default function Restaurant({ navigation }) {
       keys = await AsyncStorage.getAllKeys();
       setStorageFavoris(keys);
       setLoading(false);
-      console.log(storageFavoris);
+      // console.log(storageFavoris);
     };
     fetchAsyncStorage();
   }, []);

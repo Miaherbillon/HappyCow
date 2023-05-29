@@ -13,7 +13,6 @@ import axios from "axios";
 export default function Signin({ setToken, navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const submit = async () => {
     if (email && password) {
@@ -21,12 +20,12 @@ export default function Signin({ setToken, navigation }) {
         email: email,
         password: password,
       });
+      console.log(response.data.token);
       if (response.data.token) {
         const userToken = response.data.token;
         setToken(userToken);
         alert("Connexion");
-      } else {
-        alert("La connexion a échoué");
+        navigation.navigate("Restaurant");
       }
     } else {
       alert("Veuillez remplir tous les champs");

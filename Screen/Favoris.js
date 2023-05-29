@@ -27,7 +27,7 @@ export default function Favories(extraData) {
       setIsLoading(true);
     };
     isFocused && response();
-  }, [isFocused, extraData]);
+  }, [isFocused]);
 
   // console.log(data);
 

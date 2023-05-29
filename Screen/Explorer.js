@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import * as Location from "expo-location";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import Restaurant from "../assets/restaurants.json";
@@ -54,7 +54,12 @@ export default function Explorer() {
               }}
             >
               Végan
-              <FontAwesome5 name="map-marker-alt" size={24} color="green" />
+              <Image
+                source={require("../assets/vegan.svg")}
+                alt="logo"
+                style={styles.logo}
+              />
+              {/* <FontAwesome5 name="map-marker-alt" size={24} color="green" /> */}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -180,4 +185,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 17,
   },
+  logo: { width: 5, height: 5 },
 });
