@@ -18,31 +18,30 @@ export default function Favories(extraData) {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [data, setData] = useState();
-  console.log(extraData);
 
   useEffect(() => {
-    const response = () => {
-      setFavoris(extraData.extraData);
-      setData(extraData);
+    const fetchAsyncStorage = async () => {
+      keys = await AsyncStorage.getItem("favoris");
+
+      const obj = JSON.parse(keys);
+      setFavoris(obj);
       setIsLoading(true);
+      // console.log(obj);
     };
-    isFocused && response();
+
+    isFocused && fetchAsyncStorage();
   }, [isFocused]);
 
-  // console.log(data);
+  // console.log(Favoris);
 
-  return isLoading ? (
+  return isLoading && !Favoris ? (
     <View style={styles.page}>
       <Text style={styles.title}>Liste des favoris</Text>
       <View style={styles.container}>
         {Favoris.map((elem, index) => {
+          console.log(elem);
           return (
-            <TouchableOpacity
-              key={index}
-              // onPress={() => {
-              //   navigation.navigate("CardRestaurant", { elem: data });
-              // }}
-            >
+            <TouchableOpacity key={index}>
               <Text style={styles.nameFav}>{elem}</Text>
             </TouchableOpacity>
           );
@@ -58,9 +57,18 @@ export default function Favories(extraData) {
       </TouchableOpacity>
     </View>
   ) : (
-    <View style={styles.container}>
-      <Text style={styles.title}>Liste des favoris</Text>
-      <Text>Aucun favoris</Text>
+    <View>
+      <View style={styles.container}>
+        <Text style={styles.title}>Liste des favoris</Text>
+        <Text>Aucun favoris</Text>
+      </View>
+      <TouchableOpacity
+        onPress={async () => {
+          await AsyncStorage.clear();
+        }}
+      >
+        <Text>tout supprimer</Text>
+      </TouchableOpacity>
     </View>
   );
 }

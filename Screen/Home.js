@@ -19,7 +19,7 @@ export default function Home({ navigation, setToken }) {
           }
         }}
       >
-        <Text style={styles.tap}>Enter</Text>
+        <Text style={styles.tap}>Entrer</Text>
       </TouchableOpacity>
     </View>
   );

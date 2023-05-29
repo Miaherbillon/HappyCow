@@ -12,7 +12,7 @@ import { AntDesign, FontAwesome, Entypo } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function CardRestaurant({ navigation, route }) {
   const [latitude, setLatitude] = useState(null);
@@ -21,6 +21,7 @@ export default function CardRestaurant({ navigation, route }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [storageFavoris, setStorageFavoris] = useState([]);
   const [color, setColor] = useState();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const getPermission = async () => {
@@ -40,8 +41,8 @@ export default function CardRestaurant({ navigation, route }) {
       console.log(storageFavoris);
     };
 
-    getPermission() && fetchAsyncStorage();
-  }, [color]);
+    isFocused && getPermission() && fetchAsyncStorage();
+  }, [color, isFocused]);
   const coords = [
     {
       id: 1,
@@ -56,7 +57,7 @@ export default function CardRestaurant({ navigation, route }) {
       setColor(!color);
     } else {
       setColor(!color);
-      const newFavorites = [...storageFavoris, route.params.elem];
+      const newFavorites = [...storageFavoris, route.params];
       await AsyncStorage.setItem(
         route.params.elem.name,
         JSON.stringify(newFavorites)

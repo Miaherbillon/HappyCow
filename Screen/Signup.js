@@ -12,7 +12,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import axios from "axios";
 // import Checkbox from "expo-checkbox";
 
-export default function Signup({ navigation }) {
+export default function Signup({ navigation, setToken }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [description, setDescription] = useState("");
@@ -35,8 +35,12 @@ export default function Signup({ navigation }) {
               password,
             }
           );
-          alert("Compte créé");
-          navigation.navigate("Restaurant");
+          if (response.data.token) {
+            const userToken = response.data.token;
+            setToken(userToken);
+            alert("Compte créé");
+            navigation.navigate("Restaurant");
+          }
         } catch (error) {
           console.log(error.response);
           setErrorMessage("La création a échoué");

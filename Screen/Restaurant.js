@@ -13,6 +13,7 @@ import Header from "../components/Header";
 import Resto from "../assets/restaurants.json";
 import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Restaurant({ navigation }) {
   const [data, setData] = useState();
@@ -21,16 +22,16 @@ export default function Restaurant({ navigation }) {
   const [search, setSearch] = useState();
   const [type, setType] = useState();
   const [storageFavoris, setStorageFavoris] = useState([]);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const fetchAsyncStorage = async () => {
       keys = await AsyncStorage.getAllKeys();
       setStorageFavoris(keys);
       setLoading(false);
-      // console.log(storageFavoris);
     };
-    fetchAsyncStorage();
-  }, []);
+    isFocused && fetchAsyncStorage();
+  }, [isFocused]);
 
   return loading ? (
     <Text style={styles.loading}>Laoding ... </Text>

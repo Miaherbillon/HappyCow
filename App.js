@@ -125,14 +125,16 @@ export default function App() {
               ></Tab.Screen>
               <Tab.Screen
                 name="Profil"
-                component={Profil}
+                // component={Profil}
                 options={{
                   headerShown: false,
                   tabBarIcon: ({ color, size }) => (
                     <MaterialIcons name="tag-faces" size={24} color="black" />
                   ),
                 }}
-              ></Tab.Screen>
+              >
+                {(props) => <Profil {...props} setToken={setToken} />}
+              </Tab.Screen>
             </Tab.Navigator>
           )}
         </Stack.Screen>
