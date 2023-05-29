@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import axios from "axios";
-import { response } from "express";
 
 export default function Signin({ setToken, navigation }) {
   const [email, setEmail] = useState("");
@@ -17,16 +16,20 @@ export default function Signin({ setToken, navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   const submit = async () => {
-    const response = await axios.post("http://localhost:4001/user/login", {
-      email: email,
-      password: password,
-    });
-    if (response.data.token) {
-      const userToken = response.data.token;
-      setToken(userToken);
-      alert("Connexion");
+    if (email && password) {
+      const response = await axios.post("http://localhost:4001/user/login", {
+        email: email,
+        password: password,
+      });
+      if (response.data.token) {
+        const userToken = response.data.token;
+        setToken(userToken);
+        alert("Connexion");
+      } else {
+        alert("La connexion a échoué");
+      }
     } else {
-      alert("La connexion a échoué");
+      alert("Veuillez remplir tous les champs");
     }
   };
 

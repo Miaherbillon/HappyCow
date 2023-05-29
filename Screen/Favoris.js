@@ -39,9 +39,9 @@ export default function Favories(extraData) {
           return (
             <TouchableOpacity
               key={index}
-              onPress={() => {
-                navigation.navigate("CardRestaurant", { elem: data });
-              }}
+              // onPress={() => {
+              //   navigation.navigate("CardRestaurant", { elem: data });
+              // }}
             >
               <Text style={styles.nameFav}>{elem}</Text>
             </TouchableOpacity>

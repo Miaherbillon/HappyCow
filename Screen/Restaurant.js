@@ -12,6 +12,7 @@ import axios from "axios";
 import Header from "../components/Header";
 import Resto from "../assets/restaurants.json";
 import { FontAwesome } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Restaurant({ navigation }) {
   const [data, setData] = useState();
@@ -19,19 +20,21 @@ export default function Restaurant({ navigation }) {
   const [filter, setFilter] = useState(false);
   const [search, setSearch] = useState();
   const [type, setType] = useState();
+  const [storageFavoris, setStorageFavoris] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchAsyncStorage = async () => {
-  //     keys = await AsyncStorage.getAllKeys();
-  //     setStorageFavoris(keys);
-  //     console.log(storageFavoris);
-  //   };
-  // }, [search]);
+  useEffect(() => {
+    const fetchAsyncStorage = async () => {
+      keys = await AsyncStorage.getAllKeys();
+      setStorageFavoris(keys);
+      setLoading(false);
+      console.log(storageFavoris);
+    };
+    fetchAsyncStorage();
+  }, []);
 
-  // loading ? (
-  //   <Text style={styles.loading}>Laoding ... </Text>
-  // ) : (
-  return (
+  return loading ? (
+    <Text style={styles.loading}>Laoding ... </Text>
+  ) : (
     <View>
       <View style={styles.search}>
         <Header />
@@ -125,7 +128,9 @@ export default function Restaurant({ navigation }) {
                         <View>
                           <View style={styles.flex}>
                             <Text style={styles.title}>{elem.name}</Text>
-                            <FontAwesome name="heart" size={15} color="red" />
+                            {storageFavoris.includes(elem.name) && (
+                              <FontAwesome name="heart" size={15} color="red" />
+                            )}
                           </View>
 
                           <Text style={styles.address}>{elem.address}</Text>

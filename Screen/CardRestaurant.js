@@ -22,9 +22,6 @@ export default function CardRestaurant({ navigation, route }) {
   const [storageFavoris, setStorageFavoris] = useState([]);
   const [color, setColor] = useState();
 
-  // const isFocused = useIsFocused();
-  // console.log(route.params.elem.name);
-
   useEffect(() => {
     const getPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
