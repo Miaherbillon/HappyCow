@@ -21,7 +21,7 @@ export default function Restaurant({ navigation }) {
   const [filter, setFilter] = useState(false);
   const [search, setSearch] = useState();
   const [type, setType] = useState();
-  const [storageFavoris, setStorageFavoris] = useState([]);
+  const [storageFavoris, setStorageFavoris] = useState();
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function Restaurant({ navigation }) {
     };
     isFocused && fetchAsyncStorage();
   }, [isFocused]);
-
+  // console.log(storageFavoris);
   return loading ? (
     <Text style={styles.loading}>Laoding ... </Text>
   ) : (
@@ -129,8 +129,16 @@ export default function Restaurant({ navigation }) {
                         <View>
                           <View style={styles.flex}>
                             <Text style={styles.title}>{elem.name}</Text>
-                            {storageFavoris.includes(elem.name) && (
-                              <FontAwesome name="heart" size={15} color="red" />
+                            {storageFavoris !== null && (
+                              <View>
+                                {storageFavoris.includes(elem.name) && (
+                                  <FontAwesome
+                                    name="heart"
+                                    size={15}
+                                    color="red"
+                                  />
+                                )}
+                              </View>
                             )}
                           </View>
 

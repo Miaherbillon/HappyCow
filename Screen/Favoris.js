@@ -22,26 +22,26 @@ export default function Favories() {
       const obj = JSON.parse(jsonValue);
       setFavoris(obj);
       setIsLoading(true);
-      console.log(Favoris);
+      console.log(jsonValue);
     };
 
     isFocused && fetchAsyncStorage();
   }, [isFocused]);
 
-  console.log(Favoris);
+  // console.log(Favoris);
 
   return isLoading ? (
     <View style={styles.page}>
       <Text style={styles.title}>Liste des favoris</Text>
       <View style={styles.container}>
-        {Favoris.map((elem, index) => {
+        {/* {Favoris.map((elem, index) => {
           // console.log(elem);
           return (
             <TouchableOpacity key={index}>
               <Text style={styles.nameFav}>{elem}</Text>
             </TouchableOpacity>
           );
-        })}
+        })} */}
       </View>
 
       <TouchableOpacity

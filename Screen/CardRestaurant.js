@@ -37,13 +37,13 @@ export default function CardRestaurant({ navigation, route }) {
     };
     const fetchAsyncStorage = async () => {
       keys = await AsyncStorage.getItem("favoris");
-      setStorageFavoris(keys);
 
+      setStorageFavoris(keys);
       console.log(storageFavoris);
     };
 
     isFocused && getPermission() && fetchAsyncStorage();
-  }, [color, isFocused]);
+  }, [color, isFocused, storageFavoris]);
 
   const coords = [
     {
@@ -54,16 +54,16 @@ export default function CardRestaurant({ navigation, route }) {
     },
   ];
   const handleFavoritePress = async () => {
-    if (storageFavoris.includes(route.params.elem.name)) {
+    if (storageFavoris.includes(route.params.elem)) {
       await AsyncStorage.removeItem(route.params.elem.name);
-      setColor(!color);
+      setColor(false);
     } else {
-      setColor(!color);
+      setColor(true);
       const newFavorites = [...storageFavoris, route.params.elem];
       await AsyncStorage.setItem("favoris", JSON.stringify(newFavorites));
     }
   };
-
+  console.log(storageFavoris);
   return Loading ? (
     <Text>Loading ... </Text>
   ) : (
@@ -89,8 +89,12 @@ export default function CardRestaurant({ navigation, route }) {
                 key={route.params.elem.placeID}
                 onPress={handleFavoritePress}
               >
-                {storageFavoris.includes(route.params.elem.name) ? (
-                  <AntDesign name="star" size={24} color="yellow" />
+                {storageFavoris !== null ? (
+                  <View>
+                    {storageFavoris.includes(route.params.elem.name) && (
+                      <AntDesign name="star" size={24} color="yellow" />
+                    )}
+                  </View>
                 ) : (
                   <AntDesign name="star" size={24} color="black" />
                 )}
