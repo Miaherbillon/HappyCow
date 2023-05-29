@@ -36,13 +36,15 @@ export default function CardRestaurant({ navigation, route }) {
       }
     };
     const fetchAsyncStorage = async () => {
-      keys = await AsyncStorage.getAllKeys();
+      keys = await AsyncStorage.getItem("favoris");
       setStorageFavoris(keys);
+
       console.log(storageFavoris);
     };
 
     isFocused && getPermission() && fetchAsyncStorage();
   }, [color, isFocused]);
+
   const coords = [
     {
       id: 1,
@@ -57,11 +59,8 @@ export default function CardRestaurant({ navigation, route }) {
       setColor(!color);
     } else {
       setColor(!color);
-      const newFavorites = [...storageFavoris, route.params];
-      await AsyncStorage.setItem(
-        route.params.elem.name,
-        JSON.stringify(newFavorites)
-      );
+      const newFavorites = [...storageFavoris, route.params.elem];
+      await AsyncStorage.setItem("favoris", JSON.stringify(newFavorites));
     }
   };
 

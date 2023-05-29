@@ -8,38 +8,34 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-import { useNavigation } from "@react-navigation/native";
-
-export default function Favories(extraData) {
-  const [Favoris, setFavoris] = useState([]);
+export default function Favories() {
+  const [Favoris, setFavoris] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-  const [data, setData] = useState();
 
   useEffect(() => {
     const fetchAsyncStorage = async () => {
-      keys = await AsyncStorage.getItem("favoris");
-
-      const obj = JSON.parse(keys);
+      const jsonValue = await AsyncStorage.getItem("favoris");
+      const obj = JSON.parse(jsonValue);
       setFavoris(obj);
       setIsLoading(true);
-      // console.log(obj);
+      console.log(Favoris);
     };
 
     isFocused && fetchAsyncStorage();
   }, [isFocused]);
 
-  // console.log(Favoris);
+  console.log(Favoris);
 
-  return isLoading && !Favoris ? (
+  return isLoading ? (
     <View style={styles.page}>
       <Text style={styles.title}>Liste des favoris</Text>
       <View style={styles.container}>
         {Favoris.map((elem, index) => {
-          console.log(elem);
+          // console.log(elem);
           return (
             <TouchableOpacity key={index}>
               <Text style={styles.nameFav}>{elem}</Text>
@@ -50,7 +46,8 @@ export default function Favories(extraData) {
 
       <TouchableOpacity
         onPress={async () => {
-          await AsyncStorage.clear();
+          await AsyncStorage.removeItem("favoris");
+          navigation.navigate("Restaurant");
         }}
       >
         <Text>tout supprimer</Text>
@@ -64,7 +61,7 @@ export default function Favories(extraData) {
       </View>
       <TouchableOpacity
         onPress={async () => {
-          await AsyncStorage.clear();
+          await AsyncStorage.removeItem("favoris");
         }}
       >
         <Text>tout supprimer</Text>

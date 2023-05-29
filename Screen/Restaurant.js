@@ -26,7 +26,7 @@ export default function Restaurant({ navigation }) {
 
   useEffect(() => {
     const fetchAsyncStorage = async () => {
-      keys = await AsyncStorage.getAllKeys();
+      keys = await AsyncStorage.getItem("favoris");
       setStorageFavoris(keys);
       setLoading(false);
     };
