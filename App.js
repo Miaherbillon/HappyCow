@@ -43,8 +43,17 @@ export default function App() {
       // console.log(response);
       setStorageFavoris(response);
     };
+    const setToken = async (token) => {
+      if (token) {
+        await AsyncStorage.setItem("userToken", token);
+      } else {
+        await AsyncStorage.removeItem("userToken");
+      }
+
+      setUserToken(token);
+    };
     setIsLoading(true);
-    storage() && bootstrapAsync();
+    storage() && bootstrapAsync() && setToken();
   }, [storageFavoris]);
 
   return (
@@ -73,6 +82,7 @@ export default function App() {
             name="Signin"
             component={Signin}
             setToken={setToken}
+            options={{ title: "Revenir à la page Home" }}
             // options={{ headerShown: false }}
           ></Stack.Screen>
           <Stack.Screen name="Restaurant" options={{ headerShown: false }}>

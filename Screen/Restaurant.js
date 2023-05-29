@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "../components/Header";
 import Resto from "../assets/restaurants.json";
+import { FontAwesome } from "@expo/vector-icons";
 
 export default function Restaurant({ navigation }) {
   const [data, setData] = useState();
@@ -20,20 +21,18 @@ export default function Restaurant({ navigation }) {
   const [type, setType] = useState();
 
   // useEffect(() => {
-  //   const fechData = async () => {
-  //     const { data } = await axios.get(
-  //       "https://res.cloudinary.com/lereacteur-apollo/raw/upload/v1575242111/10w-full-stack/Scraping/restaurants.json"
-  //     );
-  //     setData(data), setLoading(false);
+  //   const fetchAsyncStorage = async () => {
+  //     keys = await AsyncStorage.getAllKeys();
+  //     setStorageFavoris(keys);
+  //     console.log(storageFavoris);
   //   };
-  //   fechData();
   // }, [search]);
 
   // loading ? (
   //   <Text style={styles.loading}>Laoding ... </Text>
   // ) : (
   return (
-    <KeyboardAwareScrollView>
+    <View>
       <View style={styles.search}>
         <Header />
         <TextInput
@@ -96,48 +95,54 @@ export default function Restaurant({ navigation }) {
           </View>
         </TouchableOpacity>
       </View>
-      <View style={styles.container}>
-        {Resto.map((elem) => {
-          // console.log(elem.name);
-          if (
-            elem.name.includes(search) ||
-            elem.type.includes(search) ||
-            !search
-          ) {
-            if (elem.type === type || filter === false) {
-              return (
-                elem.description && (
-                  <TouchableOpacity
-                    key={elem.placeId}
-                    style={styles.RestaurantBox}
-                    onPress={() =>
-                      navigation.navigate("CardRestaurant", { elem: elem })
-                    }
-                  >
-                    <View style={styles.display}>
-                      <View key={elem.placeId}>
-                        <Image
-                          source={{ uri: elem.thumbnail }}
-                          style={styles.image}
-                        />
-                      </View>
+      <KeyboardAwareScrollView>
+        <View style={styles.container}>
+          {Resto.map((elem) => {
+            // console.log(elem.name);
+            if (
+              elem.name.includes(search) ||
+              elem.type.includes(search) ||
+              !search
+            ) {
+              if (elem.type === type || filter === false) {
+                return (
+                  elem.description && (
+                    <TouchableOpacity
+                      key={elem.placeId}
+                      style={styles.RestaurantBox}
+                      onPress={() =>
+                        navigation.navigate("CardRestaurant", { elem: elem })
+                      }
+                    >
+                      <View style={styles.display}>
+                        <View key={elem.placeId}>
+                          <Image
+                            source={{ uri: elem.thumbnail }}
+                            style={styles.image}
+                          />
+                        </View>
 
-                      <View>
-                        <Text style={styles.title}>{elem.name}</Text>
-                        <Text style={styles.address}>{elem.address}</Text>
-                        <Text style={styles.description} numberOfLines={3}>
-                          {elem.description}
-                        </Text>
+                        <View>
+                          <View style={styles.flex}>
+                            <Text style={styles.title}>{elem.name}</Text>
+                            <FontAwesome name="heart" size={15} color="red" />
+                          </View>
+
+                          <Text style={styles.address}>{elem.address}</Text>
+                          <Text style={styles.description} numberOfLines={3}>
+                            {elem.description}
+                          </Text>
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                )
-              );
+                    </TouchableOpacity>
+                  )
+                );
+              }
             }
-          }
-        })}
-      </View>
-    </KeyboardAwareScrollView>
+          })}
+        </View>
+      </KeyboardAwareScrollView>
+    </View>
   );
 }
 
@@ -172,7 +177,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   display: { flexDirection: "row", gap: 20 },
-  title: { fontSize: 15, marginBottom: 10, fontWeight: "bold" },
+  title: { fontSize: 12, marginBottom: 10, fontWeight: "bold" },
   description: { width: 200, marginTop: 5, fontSize: 10 },
   address: { fontSize: 10, width: 200, fontWeight: "bold" },
   RestaurantBox: {
@@ -187,4 +192,5 @@ const styles = StyleSheet.create({
     width: 100,
     height: 90,
   },
+  flex: { flexDirection: "row", justifyContent: "space-between" },
 });

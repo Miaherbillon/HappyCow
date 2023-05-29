@@ -8,15 +8,25 @@ import {
   Image,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import axios from "axios";
 
 export default function Signin({ setToken, navigation }) {
-  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSignIn = async () => {
-    const userToken = "secret-token";
-    setToken(userToken);
-    navigation.navigate("Restaurant");
+  const submit = async () => {
+    const response = await axios.post("http://localhost:4001/user/login", {
+      email: email,
+      password: password,
+    });
+    if (response.data.token) {
+      const userToken = response.data.token;
+      setToken(userToken);
+      alert("Connexion");
+    } else {
+      alert("La connexion a échoué");
+    }
   };
 
   return (
@@ -30,20 +40,27 @@ export default function Signin({ setToken, navigation }) {
         <Text style={styles.title}>Connecte-toi !</Text>
       </View>
       <View style={styles.box}>
-        <Text>Prénom:</Text>
+        <Text>Mail:</Text>
         <TextInput
-          placeholder="Jean Paul"
-          value={firstName}
-          onChangeText={(text) => setFirstName(text)}
+          placeholder="Jean Paul @ Jean Paul"
+          value={email}
+          onChangeText={(email) => {
+            setEmail(email);
+            setErrorMessage("");
+          }}
         />
         <Text>Mot de passe:</Text>
         <TextInput
           placeholder="azerty"
           secureTextEntry={true}
           value={password}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={(password) => {
+            setPassword(password);
+            setErrorMessage("");
+          }}
         />
-        <TouchableOpacity title="Sign in" onPress={handleSignIn}>
+        {errorMessage !== "" && <Text>{errorMessage}</Text>}
+        <TouchableOpacity title="Sign in" onPress={submit}>
           <Text style={styles.buttonCo}>Connexion</Text>
         </TouchableOpacity>
       </View>
@@ -63,7 +80,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
     padding: 30,
-    backgroundColor: "rgb(152, 211, 204)",
+    backgroundColor: "rgb(31, 173, 158)",
   },
   box: {
     backgroundColor: "white",

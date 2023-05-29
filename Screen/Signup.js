@@ -6,9 +6,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  CheckBox,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import axios from "axios";
+// import Checkbox from "expo-checkbox";
 
 export default function Signup({ navigation }) {
   const [email, setEmail] = useState("");
@@ -17,21 +19,24 @@ export default function Signup({ navigation }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  // const [isChecked, setChecked] = useState(false);
+  // const [newsletter, setNewsletter] = useState(true);
 
   const submit = async () => {
     if (password === confirmPassword) {
-      if (email && username && description && password && confirmPassword) {
+      if (email && username && password && confirmPassword) {
         setErrorMessage("");
         try {
           const { data } = await axios.post(
             "http://localhost:4001/user/signup",
             {
-              email,
               username,
+              email,
               password,
             }
           );
           alert("Compte créé");
+          navigation.navigate("Restaurant");
         } catch (error) {
           console.log(error.response);
           setErrorMessage("La création a échoué");
@@ -95,7 +100,20 @@ export default function Signup({ navigation }) {
             setConfirmPassword(text);
           }}
         />
-
+        {/* <Text>newletter</Text>
+        <TextInput
+          placeholder="true or false"
+          value={newsletter}
+          onChangeText={(text) => {
+            setNewsletter(text);
+          }}
+        /> */}
+        {/* <Checkbox
+          style={styles.checkbox}
+          value={isChecked}
+          onValueChange={setChecked}
+          color={isChecked ? "#4630EB" : undefined}
+        ></Checkbox> */}
         <TouchableOpacity onPress={submit} style={styles.buttonCo}>
           <Text style={styles.co}>Validé l'inscription</Text>
         </TouchableOpacity>
@@ -116,7 +134,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
     padding: 30,
-    backgroundColor: "rgb(152, 211, 204)",
+    backgroundColor: "rgb(31, 173, 158)",
   },
   box: {
     backgroundColor: "white",
