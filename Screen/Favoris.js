@@ -6,6 +6,8 @@ import {
   FlatList,
   RefreshControl,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
@@ -26,23 +28,23 @@ export default function Favories() {
     };
 
     isFocused && fetchAsyncStorage();
-  }, [isFocused]);
+  }, [isFocused, Favoris]);
 
   // console.log(Favoris);
 
   return isLoading ? (
     <View style={styles.page}>
       <Text style={styles.title}>Liste des favoris</Text>
-      <View style={styles.container}>
-        {/* {Favoris.map((elem, index) => {
+      <KeyboardAwareScrollView style={styles.container}>
+        {Favoris.map((elem, index) => {
           // console.log(elem);
           return (
             <TouchableOpacity key={index}>
               <Text style={styles.nameFav}>{elem}</Text>
             </TouchableOpacity>
           );
-        })} */}
-      </View>
+        })}
+      </KeyboardAwareScrollView>
 
       <TouchableOpacity
         onPress={async () => {

@@ -20,8 +20,8 @@ export default function CardRestaurant({ navigation, route }) {
   const [Loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [storageFavoris, setStorageFavoris] = useState([]);
-  const [color, setColor] = useState();
   const isFocused = useIsFocused();
+  const [color, setColor] = useState(true);
 
   useEffect(() => {
     const getPermission = async () => {
@@ -35,15 +35,18 @@ export default function CardRestaurant({ navigation, route }) {
         alert("permission refusée");
       }
     };
-    const fetchAsyncStorage = async () => {
-      keys = await AsyncStorage.getItem("favoris");
 
-      setStorageFavoris(keys);
-      // console.log(keys);
+    const fetchAsyncStorage = async () => {
+      jsonValue = await AsyncStorage.getItem("favoris");
+      if (jsonValue !== null) {
+        setStorageFavoris(jsonValue);
+        console.log(storageFavoris);
+      }
     };
 
+    // console.log(Favoris);
     isFocused && getPermission() && fetchAsyncStorage();
-  }, [isFocused]);
+  }, [isFocused, storageFavoris]);
 
   const coords = [
     {
@@ -54,13 +57,15 @@ export default function CardRestaurant({ navigation, route }) {
     },
   ];
   const handleFavoritePress = async () => {
-    if (storageFavoris.includes(route.params.elem.name)) {
-      await AsyncStorage.removeItem(route.params.elem.name);
-      setColor(false);
-    } else {
+    if (storageFavoris.includes(route.params.elem)) {
+      await AsyncStorage.removeItem(route.params.elem);
       setColor(true);
-      const newFavorites = [...storageFavoris, route.params.elem];
-      await AsyncStorage.setItem("favoris", JSON.stringify(newFavorites));
+    } else {
+      setColor(false);
+      const Favoris = [...storageFavoris];
+      Favoris.push(route.params.elem);
+      setStorageFavoris(Favoris);
+      await AsyncStorage.setItem("favoris", JSON.stringify(Favoris));
     }
   };
   // console.log(storageFavoris);
@@ -89,11 +94,14 @@ export default function CardRestaurant({ navigation, route }) {
                 key={route.params.elem.placeID}
                 onPress={handleFavoritePress}
               >
-                {storageFavoris.includes(route.params.elem.name) ? (
-                  <AntDesign name="star" size={24} color="yellow" />
-                ) : (
-                  <AntDesign name="star" size={24} color="black" />
-                )}
+                <View>
+                  {storageFavoris &&
+                  storageFavoris.includes(route.params.elem.name) ? (
+                    <AntDesign name="star" size={24} color="yellow" />
+                  ) : (
+                    <AntDesign name="star" size={24} color="black" />
+                  )}
+                </View>
               </TouchableOpacity>
               <TouchableOpacity>
                 <Entypo name="share" size={24} color="black" />
@@ -105,8 +113,14 @@ export default function CardRestaurant({ navigation, route }) {
 
           <ScrollView horizontal>
             <View style={styles.images}>
-              {route.params.elem.pictures.map((images) => {
-                return <Image source={{ uri: images }} style={styles.image} />;
+              {route.params.elem.pictures.map((images, index) => {
+                return (
+                  <Image
+                    key={index}
+                    source={{ uri: images }}
+                    style={styles.image}
+                  />
+                );
               })}
             </View>
           </ScrollView>
