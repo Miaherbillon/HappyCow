@@ -54,13 +54,16 @@ export default function Explorer() {
               }}
             >
               Végan
-              <Image
-                source={require("../assets/vegan.svg")}
-                alt="logo"
-                style={styles.logo}
-              />
               {/* <FontAwesome5 name="map-marker-alt" size={24} color="green" /> */}
             </Text>
+            <Image
+              source={{
+                uri: "https://reactjs.org/logo-og.png",
+              }}
+              alt="logo"
+              style={styles.logo}
+              resizeMode="contain"
+            />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -185,5 +188,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 17,
   },
-  logo: { width: 5, height: 5 },
+  logo: { width: 30, height: 30 },
 });

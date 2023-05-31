@@ -13,6 +13,7 @@ import * as Location from "expo-location";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
+import axios from "axios";
 
 export default function CardRestaurant({ navigation, route }) {
   const [latitude, setLatitude] = useState(null);
@@ -22,6 +23,7 @@ export default function CardRestaurant({ navigation, route }) {
   const [storageFavoris, setStorageFavoris] = useState([]);
   const isFocused = useIsFocused();
   const [color, setColor] = useState(true);
+  // const [name, setname] = useState("");
 
   useEffect(() => {
     const getPermission = async () => {
@@ -36,17 +38,23 @@ export default function CardRestaurant({ navigation, route }) {
       }
     };
 
-    const fetchAsyncStorage = async () => {
-      jsonValue = await AsyncStorage.getItem("favoris");
-      if (jsonValue !== null) {
-        setStorageFavoris(jsonValue);
-        console.log(storageFavoris);
-      }
+    const fav = async () => {
+      const response = await axios.get("http://localhost:4001/favoris");
+      console.log(response.data);
+      setStorageFavoris(response.data);
     };
+    // fav();
+    // const fetchAsyncStorage = async () => {
+    //   stringifiedValue = await AsyncStorage.getItem("favoris");
+    //   if (stringifiedValue !== null) {
+    //     setStorageFavoris(JSON.parse(stringifiedValue));
+    //     console.log(storageFavoris);
+    //   }
+    // };
 
     // console.log(Favoris);
-    isFocused && getPermission() && fetchAsyncStorage();
-  }, [isFocused, storageFavoris]);
+    isFocused && getPermission() && fav();
+  }, [isFocused, color]);
 
   const coords = [
     {
@@ -56,18 +64,41 @@ export default function CardRestaurant({ navigation, route }) {
       title: route.params.elem.name,
     },
   ];
-  const handleFavoritePress = async () => {
-    if (storageFavoris.includes(route.params.elem)) {
-      await AsyncStorage.removeItem(route.params.elem);
-      setColor(true);
-    } else {
-      setColor(false);
-      const Favoris = [...storageFavoris];
-      Favoris.push(route.params.elem);
-      setStorageFavoris(Favoris);
-      await AsyncStorage.setItem("favoris", JSON.stringify(Favoris));
+  const handleFavoritePress = async (e) => {
+    // if (storageFavoris.find((item) => item.name === route.params.elem.name)) {
+    //   // await AsyncStorage.removeItem(route.params.elem);
+    //   setColor(!color);
+    // } else {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", route.params.elem.name);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:4001/favoris",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
     }
+
+    // setData(response.data);
+
+    // const favoris = [...storageFavoris, route.params.elem];
+    // setStorageFavoris(favoris);
+    // await AsyncStorage.setItem("favoris", JSON.stringify(favoris));
+    // setColor(!color);
+    // let favoris = [...storageFavoris];
+    // favoris.push(route.params.elem);
+    // setStorageFavoris(favoris);
+    // await AsyncStorage.setItem("favoris", JSON.stringify(favoris));
   };
+  // console.log(route.params.elem.name);
   // console.log(storageFavoris);
   return Loading ? (
     <Text>Loading ... </Text>
@@ -95,8 +126,7 @@ export default function CardRestaurant({ navigation, route }) {
                 onPress={handleFavoritePress}
               >
                 <View>
-                  {storageFavoris &&
-                  storageFavoris.includes(route.params.elem.name) ? (
+                  {storageFavoris.includes(route.params.elem.name) ? (
                     <AntDesign name="star" size={24} color="yellow" />
                   ) : (
                     <AntDesign name="star" size={24} color="black" />

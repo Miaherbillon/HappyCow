@@ -25,12 +25,18 @@ export default function Restaurant({ navigation }) {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    const fetchAsyncStorage = async () => {
-      keys = await AsyncStorage.getItem("favoris");
-      setStorageFavoris(keys);
-      setLoading(false);
+    const fav = async () => {
+      const response = await axios.get("http://localhost:4001/favoris");
+      console.log(response.data);
+      setStorageFavoris(response.data);
     };
-    isFocused && fetchAsyncStorage();
+    // fav();
+    // const fetchAsyncStorage = async () => {
+    //   keys = await AsyncStorage.getItem("favoris");
+    //   setStorageFavoris(keys);
+    setLoading(false);
+    // };
+    isFocused && fav();
   }, [isFocused]);
   // console.log(storageFavoris);
   return loading ? (
@@ -131,13 +137,13 @@ export default function Restaurant({ navigation }) {
                             <Text style={styles.title}>{elem.name}</Text>
                             {storageFavoris !== null && (
                               <View>
-                                {storageFavoris.includes(elem.name) && (
+                                {/* {storageFavoris.includes(elem.name) && (
                                   <FontAwesome
                                     name="heart"
                                     size={15}
                                     color="red"
                                   />
-                                )}
+                                )} */}
                               </View>
                             )}
                           </View>

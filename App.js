@@ -14,6 +14,7 @@ import Signup from "./Screen/Signup";
 import Signin from "./Screen/Signin";
 import Profil from "./Screen/Profil";
 import { useState, useEffect } from "react";
+import Favoris2 from "./Screen/Favoris2";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -111,7 +112,7 @@ export default function App() {
                   ),
                 }}
               >
-                {(props) => <Favoris {...props} extraData={storageFavoris} />}
+                {(props) => <Favoris2 {...props} extraData={storageFavoris} />}
               </Tab.Screen>
               <Tab.Screen
                 name="Explorer"
