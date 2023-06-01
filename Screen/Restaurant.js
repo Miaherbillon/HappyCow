@@ -25,18 +25,19 @@ export default function Restaurant({ navigation, setToken }) {
   const isFocused = useIsFocused();
   const [restaurants, setRestaurants] = useState();
   const [numb, setNumb] = useState(5);
-  console.log(setToken);
+  const [favoris, setFavoris] = useState();
+  // console.log(setToken);
   useEffect(() => {
     const fav = async () => {
       const response = await axios.get("http://localhost:4001/favoris");
-      console.log(response.data);
-      setStorageFavoris(response.data);
+
+      setFavoris(response.data);
     };
     setLoading(false);
 
     isFocused && fav();
   }, [isFocused, numb]);
-
+  console.log(favoris);
   return loading ? (
     <Text style={styles.loading}>Laoding ... </Text>
   ) : (
@@ -139,10 +140,9 @@ export default function Restaurant({ navigation, setToken }) {
                         <View>
                           <View style={styles.flex}>
                             <Text style={styles.title}>{elem.name}</Text>
-                            {storageFavoris && (
+                            {favoris && (
                               <View>
-                                {storageFavoris.includes(setToken) &&
-                                storageFavoris.includes(elem.name) ? (
+                                {favoris.includes(elem.name) ? (
                                   <FontAwesome
                                     name="heart"
                                     size={15}

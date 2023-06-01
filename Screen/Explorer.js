@@ -54,16 +54,16 @@ export default function Explorer() {
               }}
             >
               Végan
-              {/* <FontAwesome5 name="map-marker-alt" size={24} color="green" /> */}
+              <FontAwesome5 name="map-marker-alt" size={24} color="green" />
             </Text>
-            <Image
+            {/* <Image
               source={{
                 uri: "https://reactjs.org/logo-og.png",
               }}
               alt="logo"
               style={styles.logo}
               resizeMode="contain"
-            />
+            /> */}
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
