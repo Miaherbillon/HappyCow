@@ -64,8 +64,13 @@ export default function Restaurant({ navigation, setToken }) {
       <View style={styles.displayMenu}>
         <TouchableOpacity
           onPress={() => {
-            setFilter(true);
-            setType("vegan");
+            if (filter === false) {
+              setFilter(true);
+              setType("vegan");
+            } else {
+              setFilter(false);
+              setType("");
+            }
           }}
         >
           <View style={styles.menu}>
@@ -74,8 +79,13 @@ export default function Restaurant({ navigation, setToken }) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            setFilter(true);
-            setType("vegetarian");
+            if (filter === false) {
+              setFilter(true);
+              setType("vegetarian");
+            } else {
+              setFilter(false);
+              setType("");
+            }
           }}
         >
           <View style={styles.menu}>
@@ -84,8 +94,13 @@ export default function Restaurant({ navigation, setToken }) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            setFilter(true);
-            setType("veg-options");
+            if (filter === false) {
+              setFilter(true);
+              setType("veg-options");
+            } else {
+              setFilter(false);
+              setType("");
+            }
           }}
         >
           <View style={styles.menu}>
