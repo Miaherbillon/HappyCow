@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  FlatList,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useEffect, useState } from "react";
@@ -12,7 +13,6 @@ import axios from "axios";
 import Header from "../components/Header";
 import Resto from "../assets/restaurants.json";
 import { FontAwesome } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
 
 export default function Restaurant({ navigation }) {
@@ -23,6 +23,8 @@ export default function Restaurant({ navigation }) {
   const [type, setType] = useState();
   const [storageFavoris, setStorageFavoris] = useState();
   const isFocused = useIsFocused();
+  const [restaurants, setRestaurants] = useState();
+  const [numb, setNumb] = useState(5);
 
   useEffect(() => {
     const fav = async () => {
@@ -30,15 +32,11 @@ export default function Restaurant({ navigation }) {
       console.log(response.data);
       setStorageFavoris(response.data);
     };
-    // fav();
-    // const fetchAsyncStorage = async () => {
-    //   keys = await AsyncStorage.getItem("favoris");
-    //   setStorageFavoris(keys);
     setLoading(false);
-    // };
+
     isFocused && fav();
-  }, [isFocused]);
-  // console.log(storageFavoris);
+  }, [isFocused, numb]);
+
   return loading ? (
     <Text style={styles.loading}>Laoding ... </Text>
   ) : (
@@ -105,9 +103,13 @@ export default function Restaurant({ navigation }) {
           </View>
         </TouchableOpacity>
       </View>
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView
+        onScroll={() => {
+          setNumb(numb + 5);
+        }}
+      >
         <View style={styles.container}>
-          {Resto.map((elem) => {
+          {Resto.slice(0, numb).map((elem) => {
             // console.log(elem.name);
             if (
               elem.name.includes(search) ||
@@ -121,7 +123,9 @@ export default function Restaurant({ navigation }) {
                       key={elem.placeId}
                       style={styles.RestaurantBox}
                       onPress={() =>
-                        navigation.navigate("CardRestaurant", { elem: elem })
+                        navigation.navigate("CardRestaurant", {
+                          elem: elem,
+                        })
                       }
                     >
                       <View style={styles.display}>
@@ -135,15 +139,15 @@ export default function Restaurant({ navigation }) {
                         <View>
                           <View style={styles.flex}>
                             <Text style={styles.title}>{elem.name}</Text>
-                            {storageFavoris !== null && (
+                            {storageFavoris && (
                               <View>
-                                {/* {storageFavoris.includes(elem.name) && (
+                                {storageFavoris.includes(elem.name) ? (
                                   <FontAwesome
                                     name="heart"
                                     size={15}
                                     color="red"
                                   />
-                                )} */}
+                                ) : null}
                               </View>
                             )}
                           </View>

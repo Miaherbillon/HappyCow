@@ -15,7 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 
-export default function CardRestaurant({ navigation, route }) {
+export default function CardRestaurant({ navigation, route, setToken }) {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [Loading, setLoading] = useState(true);
@@ -23,7 +23,9 @@ export default function CardRestaurant({ navigation, route }) {
   const [storageFavoris, setStorageFavoris] = useState([]);
   const isFocused = useIsFocused();
   const [color, setColor] = useState(true);
-  // const [name, setname] = useState("");
+  const [token, setnewToken] = useState(null);
+
+  // console.log(setToken);
 
   useEffect(() => {
     const getPermission = async () => {
@@ -40,19 +42,11 @@ export default function CardRestaurant({ navigation, route }) {
 
     const fav = async () => {
       const response = await axios.get("http://localhost:4001/favoris");
-      console.log(response.data);
       setStorageFavoris(response.data);
+      setnewToken(setToken);
+      console.log(response.data);
     };
-    // fav();
-    // const fetchAsyncStorage = async () => {
-    //   stringifiedValue = await AsyncStorage.getItem("favoris");
-    //   if (stringifiedValue !== null) {
-    //     setStorageFavoris(JSON.parse(stringifiedValue));
-    //     console.log(storageFavoris);
-    //   }
-    // };
 
-    // console.log(Favoris);
     isFocused && getPermission() && fav();
   }, [isFocused, color]);
 
@@ -65,41 +59,33 @@ export default function CardRestaurant({ navigation, route }) {
     },
   ];
   const handleFavoritePress = async (e) => {
-    // if (storageFavoris.find((item) => item.name === route.params.elem.name)) {
-    //   // await AsyncStorage.removeItem(route.params.elem);
-    //   setColor(!color);
-    // } else {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", route.params.elem.name);
+    if (storageFavoris.includes(route.params.elem.name)) {
+      const data = route.params.elem.name;
+      const response = await axios.delete("http://localhost:4001/favoris", {
+        data: {
+          name: data,
+        },
+      });
+      setColor(!color);
+    } else {
+      e.preventDefault();
+      const data = route.params.elem.name;
+      const info = route.params.elem;
 
-    try {
-      const response = await axios.post(
-        "http://localhost:4001/favoris",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-    } catch (error) {
-      console.error(error);
+      try {
+        const response = await axios.post("http://localhost:4001/favoris", {
+          name: data,
+          token: token,
+          info: info,
+        });
+        setColor(!color);
+        // console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
     }
-
-    // setData(response.data);
-
-    // const favoris = [...storageFavoris, route.params.elem];
-    // setStorageFavoris(favoris);
-    // await AsyncStorage.setItem("favoris", JSON.stringify(favoris));
-    // setColor(!color);
-    // let favoris = [...storageFavoris];
-    // favoris.push(route.params.elem);
-    // setStorageFavoris(favoris);
-    // await AsyncStorage.setItem("favoris", JSON.stringify(favoris));
   };
-  // console.log(route.params.elem.name);
-  // console.log(storageFavoris);
+
   return Loading ? (
     <Text>Loading ... </Text>
   ) : (

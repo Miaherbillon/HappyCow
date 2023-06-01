@@ -6,33 +6,28 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  CheckBox,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import axios from "axios";
-// import Checkbox from "expo-checkbox";
 
 export default function Signup({ navigation, setToken }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [description, setDescription] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  // const [isChecked, setChecked] = useState(false);
-  // const [newsletter, setNewsletter] = useState(true);
 
   const submit = async () => {
     if (password === confirmPassword) {
       if (email && username && password && confirmPassword) {
         setErrorMessage("");
         try {
-          const { data } = await axios.post(
+          const response = await axios.post(
             "http://localhost:4001/user/signup",
             {
-              username,
-              email,
-              password,
+              username: username,
+              email: email,
+              password: password,
             }
           );
           if (response.data.token) {

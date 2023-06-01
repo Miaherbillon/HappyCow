@@ -6,7 +6,6 @@ import { Foundation } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Home from "./Screen/Home";
-import Favoris from "./Screen/Favoris";
 import Restaurant from "./Screen/Restaurant";
 import CardRestaurant from "./Screen/CardRestaurant";
 import Explorer from "./Screen/Explorer";
@@ -61,9 +60,11 @@ export default function App() {
 
         <Stack.Screen
           name="CardRestaurant"
-          component={CardRestaurant}
+          // component={CardRestaurant}
           options={{ headerShown: false }}
-        />
+        >
+          {(props) => <CardRestaurant {...props} setToken={userToken} />}
+        </Stack.Screen>
         <Stack.Screen
           name="Signup"
           // component={Signup}
@@ -95,7 +96,11 @@ export default function App() {
                 }}
               >
                 {(props) => (
-                  <Restaurant {...props} extraData={storageFavoris} />
+                  <Restaurant
+                    {...props}
+                    extraData={storageFavoris}
+                    Token={userToken}
+                  />
                 )}
               </Tab.Screen>
               <Tab.Screen
