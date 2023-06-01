@@ -4,26 +4,19 @@ import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 
 export default function Favoris2({ navigation }) {
-  const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState();
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    const fav = async () => {
-      // les noms des restaurants ajouter en favoris
-      const response = await axios.get("http://localhost:4001/favoris");
-      setData(response.data);
-      setLoading(false);
-    };
-
     const info = async () => {
       //toutes  les informations des restaurants enregistrer
       const information = await axios.get("http://localhost:4001/favoris/id");
       setInfo(information.data);
+      setLoading(false);
     };
 
-    isFocused && fav() && info();
+    isFocused && info();
   }, [isFocused]);
 
   return loading ? (

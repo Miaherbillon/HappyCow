@@ -42,10 +42,6 @@ export default function App() {
     bootstrapAsync();
   }, []);
 
-  if (!isLoading) {
-    return null;
-  }
-
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
@@ -99,13 +95,12 @@ export default function App() {
                   <Restaurant
                     {...props}
                     extraData={storageFavoris}
-                    Token={userToken}
+                    setToken={userToken}
                   />
                 )}
               </Tab.Screen>
               <Tab.Screen
                 name="Favoris"
-                // component={Favoris}
                 options={{
                   headerShown: false,
                   tabBarIcon: ({ color, size }) => (

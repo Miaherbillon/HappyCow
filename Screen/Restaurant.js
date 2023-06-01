@@ -15,7 +15,7 @@ import Resto from "../assets/restaurants.json";
 import { FontAwesome } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 
-export default function Restaurant({ navigation }) {
+export default function Restaurant({ navigation, setToken }) {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState(false);
@@ -25,7 +25,7 @@ export default function Restaurant({ navigation }) {
   const isFocused = useIsFocused();
   const [restaurants, setRestaurants] = useState();
   const [numb, setNumb] = useState(5);
-
+  console.log(setToken);
   useEffect(() => {
     const fav = async () => {
       const response = await axios.get("http://localhost:4001/favoris");
@@ -141,7 +141,8 @@ export default function Restaurant({ navigation }) {
                             <Text style={styles.title}>{elem.name}</Text>
                             {storageFavoris && (
                               <View>
-                                {storageFavoris.includes(elem.name) ? (
+                                {storageFavoris.includes(setToken) &&
+                                storageFavoris.includes(elem.name) ? (
                                   <FontAwesome
                                     name="heart"
                                     size={15}
