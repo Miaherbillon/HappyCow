@@ -10,7 +10,6 @@ export default function Favoris2({ navigation }) {
 
   useEffect(() => {
     const info = async () => {
-      //toutes  les informations des restaurants enregistrer
       const information = await axios.get("http://localhost:4001/favoris/id");
       setInfo(information.data);
       setLoading(false);
