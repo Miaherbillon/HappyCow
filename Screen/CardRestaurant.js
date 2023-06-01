@@ -72,6 +72,8 @@ export default function CardRestaurant({ navigation, route, setToken }) {
       const data = route.params.elem.name;
       const info = route.params.elem;
 
+      console.log(info);
+
       try {
         const response = await axios.post("http://localhost:4001/favoris", {
           name: data,

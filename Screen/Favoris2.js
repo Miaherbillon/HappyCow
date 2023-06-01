@@ -1,26 +1,28 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 
-export default function Fvaoris2() {
+export default function Favoris2({ navigation }) {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState();
   const isFocused = useIsFocused();
+
   useEffect(() => {
     const fav = async () => {
+      // les noms des restaurants ajouter en favoris
       const response = await axios.get("http://localhost:4001/favoris");
-      //   console.log(response.data);
       setData(response.data);
       setLoading(false);
     };
 
     const info = async () => {
+      //toutes  les informations des restaurants enregistrer
       const information = await axios.get("http://localhost:4001/favoris/id");
-      console.log(information);
-      setInfo(information);
+      setInfo(information.data);
     };
+
     isFocused && fav() && info();
   }, [isFocused]);
 
@@ -30,12 +32,19 @@ export default function Fvaoris2() {
     <View style={styles.page}>
       <Text style={styles.title}>Mes Favoris</Text>
       <View style={styles.container}>
-        {data.map((favoris, index) => {
-          console.log(favoris);
+        {info.map((favoris, index) => {
           return (
-            <Text key={index} style={styles.nameFav}>
-              {favoris}
-            </Text>
+            <View>
+              <TouchableOpacity
+                key={index}
+                onPress={() => {
+                  navigation.navigate("CardRestaurant", { elem: favoris[0] });
+                }}
+              >
+                {console.log(favoris[0])}
+                <Text style={styles.nameFav}>{favoris[0].name}</Text>
+              </TouchableOpacity>
+            </View>
           );
         })}
       </View>
